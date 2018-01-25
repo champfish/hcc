@@ -1,0 +1,17 @@
+{
+  "name": "hcc",
+  "version": "0.0.1",
+  "description": "Hunter Cammi CJ (in accending awesomeness levels)",
+  "license": "Unlicense",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/champfish/hcc.git"
+  },
+  "dependencies": {
+    "express": "^4.16.0",
+    "socket.io": "^2.0.4"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
