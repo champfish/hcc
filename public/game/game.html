@@ -12,6 +12,77 @@
     <script src="lib/jquery-3.3.1.min.js"></script>
     <script src="lib/bootstrap-4.0.0-beta.2-dist/js/bootstrap.bundle.min.js"></script>
     <script>
+            $(function () {
+        var socket = io();
+        var g;
+
+        /*
+         * Room Functions
+        */
+        // joins the socket room for the game
+        function joinRoom(){
+          socket.emit('joinRoom',window.location.pathname.substring(1), function(game){
+            update(game);
+          });
+        }
+
+        // the server's ping of game data
+        socket.on('roomPing', function(game){
+          if(game.time>g.time){
+            update(game);
+          }
+        });
+
+        // updates based on game data
+        function update(game){
+          g = game;
+        }
+
+        /*
+         * Player Functions
+        */
+        // requests to join a game
+        function joinGame(playerName){
+          var player;
+          player.name = playerName;
+          player.reacts = [];
+          socket.emit('joinGame',player);
+        }
+
+        // requests to react to player with an action (String) agree/disagree/star
+        function react(player, action){
+          socket.emit('react',player,action);
+        }
+
+        /*
+         * Questioner Functions
+        */
+        function askQuestion(question){
+          socket.emit('askQuestion',question);
+        }
+
+        /*
+         * Owner Functions
+        */
+        // requests to create a game
+        // questionerMode - the mode of how the questioner changes owner/random/sequential
+        function createGame(questionerMode){
+          socket.emit('createGame', questionerMode);
+        }
+
+        // requests to go to the next question
+        function nextQuestion(){
+          socket.emit('nextQuestion');
+        }
+
+        function endGame(){
+          socket.emit('endGame');
+        }
+
+
+
+        joinRoom();
+      });
     </script>
   </body>
 </html>
