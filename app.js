@@ -20,18 +20,24 @@ var games = new Map();
 // connection 
 io.on('connection', function(socket){
 	// request to join the room with the given name
-	socket.on('joinRoom', function(name){
+	socket.on('joinRoom', function(name, callback){
 		joinRoom(socket,name);
+		var game = getGame(socket);
+		callback(game);
 	});
 
 	// request to create a game
-	socket.on('createGame', function(){
+	socket.on('createGame', function(questionerMode){
 		if(!games.get(getRoom(socket))){
 			var game;
 			game.room = getRoom(socket);
 			game.owner = socket;
 			game.questioner = socket;
-			game.players = [];
+			game.questionerMode = questionerMode;
+			game.players = []; // player has name (String), socket (socket), reacts (array)
+			game.roundIndex = 0;
+			game.time = Date.now();
+			game.ongoing = true;
 			game.question = "Waiting...";
 			games.set(game.room, game);
 			roomPing(game);
@@ -40,16 +46,60 @@ io.on('connection', function(socket){
 
 	// request to join the game
 	socket.on('joinGame', function(player){
-		var game = getGame(socket)
+		var game = getGame(socket);
+		player.socket = socket;
 		game.players.push(player);
 		roomPing(game);
+	});
+
+	// request to add a certain action (String) to a player's reacts (array)
+	socket.on('react', function(player,action){
+		var game = getGame(socket);
+		var players = game.players;
+		for(i = 0; i<players.length; i++ ){
+			if(auth(player.socket,players[i].socket)){
+				players[i].reacts.push(action);
+			}
+		}
 	});
 
 	// request from the questioner to ask a question
 	socket.on('askQuestion', function(question){
 		var game = getGame(socket);
-		if(game.questioner == socket){
+		if(auth(game.questioner,socket)){
+			game.question = question;
+		}
+		roomPing(game);
+	});
 
+	// request to move on to the next question
+	socket.on('nextQuestion', function(){
+		var game = getGame(socket);
+		if(auth(game.owner,socket)){
+			switch(questionerMode){
+				case "owner":
+					game.questioner = game.owner;
+				break;
+				case "random":
+					var players = game.players;
+					game.questioner = players[Math.floor(Math.random()*players.length)].socket;
+				break;
+				case "sequential":
+					var players = game.players;
+					game.questioner = players[game.roundIndex%players.length].socket;
+				break;
+
+			}
+		}
+		roomPing(game);
+	});
+
+	// request to end the game
+	socket.on('endGame', function(){
+		var game = getGame(socket);
+		if(auth(game.owner,socket)){
+			game.ongoing = false;
+			roomPing(game);
 		}
 	});
 
@@ -61,7 +111,7 @@ io.on('connection', function(socket){
 
 
 
-
+ 
 	socket.on('chat message', function(msg){
 		if(msg.substring(0,5)=="/join"){
   			var name = msg.substring(6);
@@ -76,6 +126,11 @@ io.on('connection', function(socket){
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
+
+// returns true if the two sockets are the same, else false
+function auth(socketA, socketB){
+	return(socketA == socketB);
+}
 
 // returns the room the socket is in
 function getRoom(socket){
