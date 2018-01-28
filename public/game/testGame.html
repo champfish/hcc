@@ -58,7 +58,13 @@
         function joinGame(playerName){
           var player;
           player.name = playerName;
+          player.reacts = [];
           socket.emit('joinGame',player);
+        }
+
+        // requests to react to player with an action (String) agree/disagree/star
+        function react(player, action){
+          socket.emit('react',player,action);
         }
 
         /*
@@ -71,14 +77,19 @@
         /*
          * Owner Functions
         */
-        // requests to create a game  
-        function createGame(){
-          socket.emit('createGame');
+        // requests to create a game
+        // questionerMode - the mode of how the questioner changes owner/random/sequential
+        function createGame(questionerMode){
+          socket.emit('createGame', questionerMode);
         }
 
         // requests to go to the next question
         function nextQuestion(){
           socket.emit('nextQuestion');
+        }
+
+        function endGame(){
+          socket.emit('endGame');
         }
 
 
