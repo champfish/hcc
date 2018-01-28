@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -26,6 +27,64 @@
     <script>
       $(function () {
         var socket = io();
+        var g;
+
+        /*
+         * Room Functions
+        */
+        // joins the socket room for the game
+        function joinRoom(){
+          socket.emit('joinRoom',window.location.pathname.substring(1), function(game){
+            update(game);
+          });
+        }
+
+        // the server's ping of game data
+        socket.on('roomPing', function(game){
+          if(game.time>g.time){
+            update(game);
+          }
+        });
+
+        // updates based on game data
+        function update(game){
+          g = game;
+        }
+
+        /*
+         * Player Functions
+        */
+        // requests to join a game
+        function joinGame(playerName){
+          var player;
+          player.name = playerName;
+          socket.emit('joinGame',player);
+        }
+
+        /*
+         * Questioner Functions
+        */
+        function askQuestion(question){
+          socket.emit('askQuestion',question);
+        }
+
+        /*
+         * Owner Functions
+        */
+        // requests to create a game  
+        function createGame(){
+          socket.emit('createGame');
+        }
+
+        // requests to go to the next question
+        function nextQuestion(){
+          socket.emit('nextQuestion');
+        }
+
+
+
+        joinRoom();
+
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
@@ -39,7 +98,8 @@
           $('#messages').append($('<li>').text('Joining room '+ roomName));
           window.scrollTo(0, document.body.scrollHeight);
           document.title=roomName;
-        });        
+        });
+
       });
     </script>
   </body>
