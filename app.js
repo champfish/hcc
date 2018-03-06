@@ -10,7 +10,7 @@ app.use('/',express.static(__dirname + '/public')); // serves static files in /h
 
 app.get(/^(?!\/.+\/).*/, function(req, res){
 	var url = req.originalUrl.substring(1);
-	res.sendFile(__dirname + '/public/game/testGame.html');
+	res.sendFile(__dirname + '/public/game/game.html');
 });
 
 
@@ -103,24 +103,18 @@ io.on('connection', function(socket){
 		}
 	});
 
+	// request for data for download
+	socket.on('getDataDownload', function(callback){
+		callback(getGame(socket));
+	});
+
+	// sents updated game info to all connected clients
 	function roomPing(game){
 		game.time = Date.now();
 		io.sockets.in(game.room).emit('roomPing',game);
 	}
 
 
-
-
- 
-	socket.on('chat message', function(msg){
-		if(msg.substring(0,5)=="/join"){
-  			var name = msg.substring(6);
-  			socket.emit('room',name);
-  			joinRoom(socket,name);
-  		}else{
-			io.sockets.in(getRoom(socket)).emit('chat message', msg);
-  		}
-  });
 });
 
 http.listen(port, function(){
