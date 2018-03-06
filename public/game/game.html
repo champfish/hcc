@@ -12,7 +12,8 @@
     <script src="lib/jquery-3.3.1.min.js"></script>
     <script src="lib/bootstrap-4.0.0-beta.2-dist/js/bootstrap.bundle.min.js"></script>
     <script>
-            $(function () {
+      $(function() {
+        console.log('neep');
         var socket = io();
         var g;
 
@@ -21,9 +22,14 @@
         */
         // joins the socket room for the game
         function joinRoom(){
-          socket.emit('joinRoom',window.location.pathname.substring(1), function(game){
+          socket.emit('joinRoom',getURL(), function(game){
             update(game);
           });
+        }
+
+        // gets the current visited URL
+        function getURL(){
+          return window.location.pathname.substring(1);
         }
 
         // the server's ping of game data
@@ -33,6 +39,28 @@
           }
         });
 
+        // downloads the game's data
+        function downloadGameData(){
+          socket.emit('getDataDownload', function(data){
+            var fileName = getURL()+(new Date()).toISOString().slice(0,10).replace(/-/g,"") + ".txt";
+            saveFile(fileName,data);
+          });
+        }
+
+      function saveFile(filename, data) {
+          var blob = new Blob([data], {type: 'text/csv'});
+          if(window.navigator.msSaveOrOpenBlob) {
+              window.navigator.msSaveBlob(blob, filename);
+          }
+          else{
+              var elem = window.document.createElement('a');
+              elem.href = window.URL.createObjectURL(blob);
+              elem.download = filename;        
+              document.body.appendChild(elem);
+              elem.click();        
+              document.body.removeChild(elem);
+          }
+      }
         // updates based on game data
         function update(game){
           g = game;
@@ -41,6 +69,7 @@
         /*
          * Player Functions
         */
+
         // requests to join a game
         function joinGame(playerName){
           var player;
@@ -64,6 +93,7 @@
         /*
          * Owner Functions
         */
+
         // requests to create a game
         // questionerMode - the mode of how the questioner changes owner/random/sequential
         function createGame(questionerMode){
@@ -75,10 +105,10 @@
           socket.emit('nextQuestion');
         }
 
+        // requests the server to end the game
         function endGame(){
           socket.emit('endGame');
         }
-
 
 
         joinRoom();
