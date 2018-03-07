@@ -4,8 +4,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
-
-
 app.use('/',express.static(__dirname + '/public')); // serves static files in /html
 
 app.get(/^(?!\/.+\/).*/, function(req, res){
@@ -117,6 +115,7 @@ io.on('connection', function(socket){
 
 });
 
+// starts the webserver listen
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
@@ -142,3 +141,58 @@ function joinRoom(socket,name){
 	socket.leave(getRoom(socket));
 	socket.join(name);
 }
+
+
+
+// 	WATSON DEEP LEARNING
+var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+
+var toneAnalyzer = new ToneAnalyzerV3({
+  username: '2670a2f3-22cb-4e95-8fe4-b98beebb88e1',
+  password: 'UXU7x4NGWMWT',
+  version_date: '2017-09-21',
+  url: 'https://gateway.watsonplatform.net/tone-analyzer/api/'
+});
+
+
+// Get Tone overview
+function getTone(text, callback){
+	console.log(text);
+	toneAnalyzer.tone(
+	  {
+	    tone_input: text,
+	    content_type: 'text/plain'
+	  },
+	  function(err, tone) {
+	    if (err) {
+	      console.log(err);
+	      callback(null);
+	    } else {
+	      callback(tone);
+	    }
+	  }
+	);
+}
+
+// gets a numerical chance the text has a "anger" sentiment from 0 to 1
+function getAnger(text, callback){
+	getTone(text,function(sent){
+		if(sent==null){
+			return 0;
+		}
+		var tones = sent.document_tone.tones;
+		var anger = 0;
+		for(var i = 0; i<tones.length; i++){
+			var tone = tones[i];
+			if(tone.tone_id=='anger'){
+				anger = tone.score;
+			}
+		}
+		callback(anger);
+		//console.log(JSON.stringify(callback, null, 2));
+	});
+}
+
+getAnger('fuck Cammi', function(callback){
+	console.log(callback);
+});
