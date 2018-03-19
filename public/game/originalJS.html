@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Insert Title Here</title>
+    <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon">
+    <style>
+    </style>
+    <link href="lib/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="lib/socket.io.slim.2.0.4.js"></script>
+    <script src="lib/jquery-3.3.1.min.js"></script>
+    <script src="lib/bootstrap-4.0.0-beta.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      $(function() {
+        console.log('neep');
+        var socket = io();
+        var g;
+
+        /*
+         * Room Functions
+        */
+        // joins the socket room for the game
+        function joinRoom(){
+          socket.emit('joinRoom',getURL(), function(game){
+            update(game);
+          });
+        }
+
+        // gets the current visited URL
+        function getURL(){
+          return window.location.pathname.substring(1);
+        }
+
+        // the server's ping of game data
+        socket.on('roomPing', function(game){
+          if(game.time>g.time){
+            update(game);
+          }
+        });
+
+        // downloads the game's data
+        function downloadGameData(){
+          socket.emit('getDataDownload', function(data){
+            var fileName = getURL()+(new Date()).toISOString().slice(0,10).replace(/-/g,"") + ".txt";
+            saveFile(fileName,data);
+          });
+        }
+
+      function saveFile(filename, data) {
+          var blob = new Blob([data], {type: 'text/csv'});
+          if(window.navigator.msSaveOrOpenBlob) {
+              window.navigator.msSaveBlob(blob, filename);
+          }
+          else{
+              var elem = window.document.createElement('a');
+              elem.href = window.URL.createObjectURL(blob);
+              elem.download = filename;        
+              document.body.appendChild(elem);
+              elem.click();        
+              document.body.removeChild(elem);
+          }
+      }
+        // updates based on game data
+        function update(game){
+          g = game;
+        }
+
+        /*
+         * Player Functions
+        */
+
+        // requests to join a game
+        function joinGame(playerName){
+          var player;
+          player.name = playerName;
+          player.reacts = [];
+          socket.emit('joinGame',player);
+        }
+
+        // requests to react to player with an action (String) agree/disagree/star
+        function react(player, action){
+          socket.emit('react',player,action);
+        }
+
+        /*
+         * Questioner Functions
+        */
+        function askQuestion(question){
+          socket.emit('askQuestion',question);
+        }
+
+        /*
+         * Owner Functions
+        */
+
+        // requests to create a game
+        // questionerMode - the mode of how the questioner changes owner/random/sequential
+        function createGame(questionerMode){
+          socket.emit('createGame', questionerMode);
+        }
+
+        // requests to go to the next question
+        function nextQuestion(){
+          socket.emit('nextQuestion');
+        }
+
+        // requests the server to end the game
+        function endGame(){
+          socket.emit('endGame');
+        }
+
+
+        joinRoom();
+      });
+    </script>
+  </body>
+</html>

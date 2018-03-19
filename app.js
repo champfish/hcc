@@ -193,6 +193,6 @@ function getAnger(text, callback){
 	});
 }
 
-getAnger('fuck Cammi', function(callback){
-	console.log(callback);
-});
+//getAnger('fuck Cammi', function(callback){
+//	console.log(callback);
+//});
