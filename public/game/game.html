@@ -22,7 +22,7 @@
 							<p id="question">		Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
 					</div>
-					<container id="answerContainer" class="bd-example p-1 col-xs-auto container-fluid mh-100 ">
+					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
 						<div id="answerSection" class="d-flex text-white pre-scrollable align-content-stretch flex-wrap bd-highlight " style="min-height: 420px;" >
 						</div>
 					</container>
@@ -35,8 +35,37 @@
 					</div>
 				</div>
 			</div>
-			<div id="inputSection" class=" col-11 ml-2 p-2 row ">
-				<textarea class="form-control" rows="3" placeholder="Your Answer:" ></textarea>
+			<div id="inputSection" class="justify-content-center mb-1 col-12 ml-2 p-2 row">
+				<button id="joinGame" type="button" style="background-color: #f88379" class="text-white btn btn-lg " data-toggle="modal" data-target="#secondModal">Join Game</button>
+	      <div class="modal fade" id="secondModal">
+	         <div class="modal-dialog">
+	           <div class="modal-content">
+
+	             <!-- Modal Header -->
+	             <div class="modal-header">
+	               <h4 class="modal-title">Join Game</h4>
+	               <button type="button" class="close" data-dismiss="modal"> </button>
+	             </div>
+
+	             <!-- Modal body -->
+	             <div class="modal-body">
+	               <div class="form-group">
+
+	                    <input type="text" placeholder="Name" class="form-control" id="usr">
+	                  </div>
+
+
+	             </div>
+
+	             <!-- Modal footer -->
+	             <div class="modal-footer">
+	               <button type="button" class="btn btn-info" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
+	             </div>
+
+	           </div>
+	         </div>
+	       </div>
+
 			</div>
 		</div>
 		<!-- Optional JavaScript -->
@@ -203,6 +232,17 @@
 					var x = document.createElement("DIV");
 					x.setAttribute("id", "answerEnlarge");
 				}
+
+				function pageShowInputBox() {
+	        var section = document.getElementById("inputSection");
+	        var textBox = document.createElement("textarea");
+	        var joinButton = document.getElementById("joinGame");
+	        textBox.setAttribute("class", "form-control col-11");
+	        textBox.setAttribute("rows", "3");
+	        textBox.setAttribute("placeholder", "Your Answer:");
+	        section.appendChild(textBox);
+	        joinButton.remove(joinButton);
+	      }
 
 				function pageHideAnswer(name) {
 					var x = document.createElement("DIV");
