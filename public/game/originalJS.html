@@ -1,31 +1,19 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Insert Title Here</title>
     <link rel="shortcut icon" href="res/favicon.ico" type="image/x-icon">
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages { margin-bottom: 40px }
     </style>
     <link href="lib/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
     <script src="lib/socket.io.slim.2.0.4.js"></script>
     <script src="lib/jquery-3.3.1.min.js"></script>
     <script src="lib/bootstrap-4.0.0-beta.2-dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      $(function () {
+      $(function() {
+        console.log('neep');
         var socket = io();
         var g;
 
@@ -34,9 +22,14 @@
         */
         // joins the socket room for the game
         function joinRoom(){
-          socket.emit('joinRoom',window.location.pathname.substring(1), function(game){
+          socket.emit('joinRoom',getURL(), function(game){
             update(game);
           });
+        }
+
+        // gets the current visited URL
+        function getURL(){
+          return window.location.pathname.substring(1);
         }
 
         // the server's ping of game data
@@ -46,6 +39,28 @@
           }
         });
 
+        // downloads the game's data
+        function downloadGameData(){
+          socket.emit('getDataDownload', function(data){
+            var fileName = getURL()+(new Date()).toISOString().slice(0,10).replace(/-/g,"") + ".txt";
+            saveFile(fileName,data);
+          });
+        }
+
+      function saveFile(filename, data) {
+          var blob = new Blob([data], {type: 'text/csv'});
+          if(window.navigator.msSaveOrOpenBlob) {
+              window.navigator.msSaveBlob(blob, filename);
+          }
+          else{
+              var elem = window.document.createElement('a');
+              elem.href = window.URL.createObjectURL(blob);
+              elem.download = filename;        
+              document.body.appendChild(elem);
+              elem.click();        
+              document.body.removeChild(elem);
+          }
+      }
         // updates based on game data
         function update(game){
           g = game;
@@ -54,6 +69,7 @@
         /*
          * Player Functions
         */
+
         // requests to join a game
         function joinGame(playerName){
           var player;
@@ -77,6 +93,7 @@
         /*
          * Owner Functions
         */
+
         // requests to create a game
         // questionerMode - the mode of how the questioner changes owner/random/sequential
         function createGame(questionerMode){
@@ -88,29 +105,13 @@
           socket.emit('nextQuestion');
         }
 
+        // requests the server to end the game
         function endGame(){
           socket.emit('endGame');
         }
 
 
-
         joinRoom();
-
-        $('form').submit(function(){
-          socket.emit('chat message', $('#m').val());
-          $('#m').val('');
-          return false;
-        });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
-          window.scrollTo(0, document.body.scrollHeight);
-        });
-        socket.on('room', function(roomName){
-          $('#messages').append($('<li>').text('Joining room '+ roomName));
-          window.scrollTo(0, document.body.scrollHeight);
-          document.title=roomName;
-        });
-
       });
     </script>
   </body>

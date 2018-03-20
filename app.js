@@ -4,13 +4,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
-
-
 app.use('/',express.static(__dirname + '/public')); // serves static files in /html
 
 app.get(/^(?!\/.+\/).*/, function(req, res){
 	var url = req.originalUrl.substring(1);
-	res.sendFile(__dirname + '/public/game/testGame.html');
+	res.sendFile(__dirname + '/public/game/game.html');
 });
 
 
@@ -38,6 +36,7 @@ io.on('connection', function(socket){
 			game.roundIndex = 0;
 			game.time = Date.now();
 			game.ongoing = true;
+			game.answers = []; // answers have text (String) and player (Player)
 			game.question = "Waiting...";
 			games.set(game.room, game);
 			roomPing(game);
@@ -54,13 +53,24 @@ io.on('connection', function(socket){
 
 	// request to add a certain action (String) to a player's reacts (array)
 	socket.on('react', function(player,action){
+	var p = getPlayerBySocket(player.socket);
+	p.push(action);
+	//	var game = getGame(socket);
+	//	var players = game.players;
+	//	for(i = 0; i<players.length; i++ ){
+	//		if(auth(player.socket,players[i].socket)){
+	//			players[i].reacts.push(action);
+	//		}
+	//	}
+	});
+
+	// request from the questioner to ask a question
+	socket.on('submitAnswer', function(answer){
 		var game = getGame(socket);
-		var players = game.players;
-		for(i = 0; i<players.length; i++ ){
-			if(auth(player.socket,players[i].socket)){
-				players[i].reacts.push(action);
-			}
-		}
+		var player = getPlayerBySocket(socket);
+		var answer = {text:answer, player: player};
+		game.answers.push(answer);
+		roomPing(game);
 	});
 
 	// request from the questioner to ask a question
@@ -103,26 +113,21 @@ io.on('connection', function(socket){
 		}
 	});
 
+	// request for data for download
+	socket.on('getDataDownload', function(callback){
+		callback(getGame(socket));
+	});
+
+	// sents updated game info to all connected clients
 	function roomPing(game){
 		game.time = Date.now();
 		io.sockets.in(game.room).emit('roomPing',game);
 	}
 
 
-
-
- 
-	socket.on('chat message', function(msg){
-		if(msg.substring(0,5)=="/join"){
-  			var name = msg.substring(6);
-  			socket.emit('room',name);
-  			joinRoom(socket,name);
-  		}else{
-			io.sockets.in(getRoom(socket)).emit('chat message', msg);
-  		}
-  });
 });
 
+// starts the webserver listen
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
@@ -147,4 +152,64 @@ function getGame(socket){
 function joinRoom(socket,name){
 	socket.leave(getRoom(socket));
 	socket.join(name);
+}
+
+// returns the player object of the socket
+function getPlayerBySocket(socket){
+	var game = getGame(socket);
+	var players = game.players;
+	for(i = 0; i<players.length; i++ ){
+		if(auth(socket,players[i].socket)){
+			return players[i];
+		}
+	}
+}
+
+// 	WATSON DEEP LEARNING
+var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+
+var toneAnalyzer = new ToneAnalyzerV3({
+  username: '2670a2f3-22cb-4e95-8fe4-b98beebb88e1',
+  password: 'UXU7x4NGWMWT',
+  version_date: '2017-09-21',
+  url: 'https://gateway.watsonplatform.net/tone-analyzer/api/'
+});
+
+
+// Get Tone overview
+function getTone(text, callback){
+	console.log(text);
+	toneAnalyzer.tone(
+	  {
+	    tone_input: text,
+	    content_type: 'text/plain'
+	  },
+	  function(err, tone) {
+	    if (err) {
+	      console.log(err);
+	      callback(null);
+	    } else {
+	      callback(tone);
+	    }
+	  }
+	);
+}
+
+// gets a numerical chance the text has a "anger" sentiment from 0 to 1
+function getAnger(text, callback){
+	getTone(text,function(sent){
+		if(sent==null){
+			return 0;
+		}
+		var tones = sent.document_tone.tones;
+		var anger = 0;
+		for(var i = 0; i<tones.length; i++){
+			var tone = tones[i];
+			if(tone.tone_id=='anger'){
+				anger = tone.score;
+			}
+		}
+		callback(anger);
+		//console.log(JSON.stringify(callback, null, 2));
+	});
 }
