@@ -210,11 +210,12 @@
 
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
-					var text = document.getElementById("question");
-					var para = document.createElement("p");
-					var node = document.createTextNode(question);
-					para.appendChild(node);
-					container.replaceChild(para,text);
+	        var text = document.getElementById("question");
+	        var para = document.createElement("p");
+	        var node = document.createTextNode(question);
+	        para.appendChild(node);
+	        text.replaceWith(para);
+	        para.setAttribute("id", "question");
 				}
 
 				function pageShowAnswer(name) {
@@ -248,21 +249,16 @@
 				function pageAddAnswer(user, answer) {
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
-
 					var newUser = document.createElement("h3");
 					var newDiv = document.createElement("div");
-
 					newDiv.setAttribute("class", "p-2  pre-scrollable col m-1 rounded border");
 					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
-
 					var para = document.createElement("p");
 					para.setAttribute("class", "p-2");
 					var answerText = document.createTextNode(answer);
 					var userText = document.createTextNode(user);
-
 					newUser.appendChild(userText);
 					newDiv.appendChild(newUser);
-
 					para.appendChild(answerText);
 					newDiv.appendChild(para);
 					section.appendChild(newDiv);
