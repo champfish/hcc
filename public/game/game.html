@@ -81,6 +81,7 @@
 					});
 				}
 
+				// saves the passed parameter of data as filename
 				function saveFile(filename, data) {
 					var blob = new Blob([data], {type: 'text/csv'});
 					if(window.navigator.msSaveOrOpenBlob) {
@@ -97,6 +98,16 @@
 				}
 				// updates based on game data
 				function update(game){
+					if(!game.ongoing){
+						// TODO: show end game
+					}
+					if(game.queston != g.question){
+						pageNewQuestion(game.question);
+					}
+
+					pageSetUsers(game.players);
+					pageSetAnswers(game.answers)
+
 					g = game;
 				}
 
@@ -114,6 +125,11 @@
 				// requests to react to player with an action (String) agree/disagree/star
 				function react(player, action){
 					socket.emit('react',player,action);
+				}
+
+				// request to submit user answer
+				function submitAnswer(answer){
+					socket.emit('submitAnswer', answer);
 				}
 
 				/*
@@ -146,6 +162,14 @@
 				/*
 				 * Page Functions
 				*/
+				function pageSetUsers(users){
+					pageRemoveAllUsers();
+				}
+
+				function pageSetAnswers(answers){
+					pageRemoveAllAnswers();
+				}
+
 				function pageAddUser(name) {
 					var userText = document.createElement("p");
 					var text = document.createTextNode(name);
@@ -157,6 +181,13 @@
 				function pageRemoveUser(name) {
 					document.getElementById("LMAO SORRY CJ").remove();
 				}
+
+				function pageRemoveAllUsers(){
+        			var userList = document.getElementById("userTable");
+        			while (userList.hasChildNodes()) {
+        				userList.removeChild(userList.firstChild);
+        			}
+      			}
 				
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
@@ -176,6 +207,13 @@
 					var x = document.createElement("DIV");
 					x.setAttribute("id", "answerEnlarge");
 				}
+
+				function pageRemoveAllAnswers() {
+        			var section = document.getElementById("answerSection");
+        			while (section.hasChildNodes()) {
+          				section.removeChild(section.firstChild);
+        			}
+     			}
 				
 				function pageAddAnswer(user, answer) {
 					var container = document.getElementById("answerContainer");
@@ -200,6 +238,9 @@
 					section.appendChild(newDiv);
 					container.appendChild(section);
 				}
+
+
+
 				joinRoom();
 		</script>
 	</body>

@@ -36,6 +36,7 @@ io.on('connection', function(socket){
 			game.roundIndex = 0;
 			game.time = Date.now();
 			game.ongoing = true;
+			game.answers = []; // answers have text (String) and player (Player)
 			game.question = "Waiting...";
 			games.set(game.room, game);
 			roomPing(game);
@@ -52,13 +53,24 @@ io.on('connection', function(socket){
 
 	// request to add a certain action (String) to a player's reacts (array)
 	socket.on('react', function(player,action){
+	var p = getPlayerBySocket(player.socket);
+	p.push(action);
+	//	var game = getGame(socket);
+	//	var players = game.players;
+	//	for(i = 0; i<players.length; i++ ){
+	//		if(auth(player.socket,players[i].socket)){
+	//			players[i].reacts.push(action);
+	//		}
+	//	}
+	});
+
+	// request from the questioner to ask a question
+	socket.on('submitAnswer', function(answer){
 		var game = getGame(socket);
-		var players = game.players;
-		for(i = 0; i<players.length; i++ ){
-			if(auth(player.socket,players[i].socket)){
-				players[i].reacts.push(action);
-			}
-		}
+		var player = getPlayerBySocket(socket);
+		var answer = {text:answer, player: player};
+		game.answers.push(answer);
+		roomPing(game);
 	});
 
 	// request from the questioner to ask a question
@@ -142,7 +154,16 @@ function joinRoom(socket,name){
 	socket.join(name);
 }
 
-
+// returns the player object of the socket
+function getPlayerBySocket(socket){
+	var game = getGame(socket);
+	var players = game.players;
+	for(i = 0; i<players.length; i++ ){
+		if(auth(socket,players[i].socket)){
+			return players[i];
+		}
+	}
+}
 
 // 	WATSON DEEP LEARNING
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
@@ -192,7 +213,3 @@ function getAnger(text, callback){
 		//console.log(JSON.stringify(callback, null, 2));
 	});
 }
-
-//getAnger('fuck Cammi', function(callback){
-//	console.log(callback);
-//});
