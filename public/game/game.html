@@ -50,13 +50,30 @@
 	               </div>
 	             </div>
 	             <div class="modal-footer">
-	               <button type="button" class="btn btn-info" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
+	               <button type="button" class="btn" style="background-color: #f88379" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
 	             </div>
 	           </div>
 	         </div>
 	       </div>
 			</div>
 		</div>
+		<div class="modal fade" id="firstModal">
+			 <div class="modal-dialog">
+				 <div class="modal-content">
+					 <div class="modal-header">
+						 <h4 class="modal-title">Enter the Next Question</h4>
+						 <button type="button" class="close" data-dismiss="modal"> </button>
+					 </div>
+					 <div class="modal-body">
+						 <textarea id="newQuestion" class="form-control" rows="3" placeholder="Question" ></textarea>
+					 </div>
+					 <div class="modal-footer">
+						 <button type="button" style="background-color: #f88379" class="btn " data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
+					 </div>
+				 </div>
+			 </div>
+		 </div>
+
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -188,6 +205,10 @@
 					pageRemoveAllAnswers();
 				}
 
+				function pageJoinGame() {
+					var user = document.getElementById("usr").value;
+				}
+
 				function pageAddUser(name) {
 					var userText = document.createElement("p");
 					var text = document.createTextNode(name);
@@ -207,6 +228,25 @@
         				userList.removeChild(userList.firstChild);
         			}
       			}
+
+						function pageSubmitQuestion(){
+							var question = document.getElementById("newQuestion").value;
+							pageNewQuestion(question);
+
+
+						}
+
+				function pageNewQuestionButton(){
+					var container = document.getElementById("questionContainer");
+					var button = document.createElement("button");
+					var node = document.createTextNode("Submit New Question");
+					button.setAttribute("type", "button");
+					button.setAttribute("class", "btn mb-3 btn-primary");
+					button.setAttribute("data-toggle", "modal");
+					button.setAttribute("data-target", "#firstModal");
+					container.appendChild(button);
+					button.appendChild(node);
+				}
 
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
