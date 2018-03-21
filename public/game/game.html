@@ -50,7 +50,7 @@
 	               </div>
 	             </div>
 	             <div class="modal-footer">
-	               <button type="button" class="btn" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
+	               <button type="button" class="btn text-white" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
 	             </div>
 	           </div>
 	         </div>
@@ -62,17 +62,18 @@
 				 <div class="modal-content">
 					 <div class="modal-header">
 						 <h4 class="modal-title">Enter the Next Question</h4>
-						 <button type="button" class="close" data-dismiss="modal"> </button>
+						 <button type="button" class="text-white close" data-dismiss="modal"> </button>
 					 </div>
 					 <div class="modal-body">
 						 <textarea id="newQuestion" class="form-control" rows="3" placeholder="Question" ></textarea>
 					 </div>
 					 <div class="modal-footer">
-						 <button type="button" style="background-color: #FFB9B9" class="btn " data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
+						 <button type="button" style="background-color: #FFB9B9" class="btn text-white" data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
 					 </div>
 				 </div>
 			 </div>
 		 </div>
+		 
 
 
 		<!-- Optional JavaScript -->
@@ -242,7 +243,8 @@
 					var button = document.createElement("button");
 					var node = document.createTextNode("Submit New Question");
 					button.setAttribute("type", "button");
-					button.setAttribute("class", "btn mb-3 btn-primary");
+					button.setAttribute("class", "btn mb-3 text-white");
+					button.setAttribute("style", "background-color: #FFb9b9");
 					button.setAttribute("data-toggle", "modal");
 					button.setAttribute("data-target", "#firstModal");
 					container.appendChild(button);
