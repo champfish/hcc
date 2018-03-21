@@ -13,17 +13,17 @@
 			<div class="col-12 d-flex" >
 			</div>
 			<div class="row">
-				<div id="body" class=" mt-3 ml-1 row col-lg-9 container-fluid " >
-					<div class="d-none d-sm-block col-md-2 flex-wrap" id="question-image" >
-						<img src="/Users/s129527/Downloads/yes.png" class=" ml-4 rounded" width="95px" style=" max-width: 100%">
+				<div id="body" class=" mt-3 ml-1 row col-lg-9 container-fluid">
+					<div class="d-none d-md-block d-md-block col-md-2 flex-wrap" id="question-image" >
+						<img src="/Users/s129527/Downloads/crowlogo.png" class=" ml-4 rounded" width="95vh" style=" max-width: 100%">
 					</div>
 					<div	class="p-1 col-md-9 rounded ">
-						<div id="questionContainer" class="col-md-12 pre-scrollable  rounded" style=" height:85px; background-color: #E4E4E4 ">
+						<div id="questionContainer" class="col-md-12 pre-scrollable  rounded" style=" height:13vh; background-color: #E4E4E4 ">
 							<p id="question">		Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
 					</div>
-					<container id="answerContainer" class="bd-example p-1 col-xs-auto container-fluid mh-100 ">
-						<div id="answerSection" class="d-flex text-white pre-scrollable align-content-stretch flex-wrap bd-highlight " style="min-height: 420px;" >
+					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
+						<div id="answerSection" class="d-flex text-white mb-1 align-content-stretch flex-wrap bd-highlight " style="" >
 						</div>
 					</container>
 				</div>
@@ -35,10 +35,46 @@
 					</div>
 				</div>
 			</div>
-			<div id="inputSection" class=" col-11 ml-2 p-2 row ">
-				<textarea class="form-control" rows="3" placeholder="Your Answer:" ></textarea>
+			<div id="inputSection" class="justify-content-center mb-1 col-12 ml-2 p-2 row">
+				<button id="joinGame" type="button" style="background-color: #FFB9B9" class="text-white btn btn-lg " data-toggle="modal" data-target="#secondModal">Join Game</button>
+	      <div class="modal fade" id="secondModal">
+	         <div class="modal-dialog">
+	           <div class="modal-content">
+	             <div class="modal-header">
+	               <h4 class="modal-title">Join Game</h4>
+	               <button type="button" class="close" data-dismiss="modal"> </button>
+	             </div>
+	             <div class="modal-body">
+	               <div class="form-group">
+	   					 			<input type="text" placeholder="Name" class="form-control" id="usr">
+	               </div>
+	             </div>
+	             <div class="modal-footer">
+	               <button type="button" class="btn" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
+	             </div>
+	           </div>
+	         </div>
+	       </div>
 			</div>
 		</div>
+		<div class="modal fade" id="firstModal">
+			 <div class="modal-dialog">
+				 <div class="modal-content">
+					 <div class="modal-header">
+						 <h4 class="modal-title">Enter the Next Question</h4>
+						 <button type="button" class="close" data-dismiss="modal"> </button>
+					 </div>
+					 <div class="modal-body">
+						 <textarea id="newQuestion" class="form-control" rows="3" placeholder="Question" ></textarea>
+					 </div>
+					 <div class="modal-footer">
+						 <button type="button" style="background-color: #FFB9B9" class="btn " data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
+					 </div>
+				 </div>
+			 </div>
+		 </div>
+
+
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -170,6 +206,10 @@
 					pageRemoveAllAnswers();
 				}
 
+				function pageJoinGame() {
+					var user = document.getElementById("usr").value;
+				}
+
 				function pageAddUser(name) {
 					var userText = document.createElement("p");
 					var text = document.createTextNode(name);
@@ -190,19 +230,50 @@
         			}
       			}
 
+						function pageSubmitQuestion(){
+							var question = document.getElementById("newQuestion").value;
+							pageNewQuestion(question);
+
+
+						}
+
+				function pageNewQuestionButton(){
+					var container = document.getElementById("questionContainer");
+					var button = document.createElement("button");
+					var node = document.createTextNode("Submit New Question");
+					button.setAttribute("type", "button");
+					button.setAttribute("class", "btn mb-3 btn-primary");
+					button.setAttribute("data-toggle", "modal");
+					button.setAttribute("data-target", "#firstModal");
+					container.appendChild(button);
+					button.appendChild(node);
+				}
+
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
-					var text = document.getElementById("question");
-					var para = document.createElement("p");
-					var node = document.createTextNode(question);
-					para.appendChild(node);
-					container.replaceChild(para,text);
+	        var text = document.getElementById("question");
+	        var para = document.createElement("p");
+	        var node = document.createTextNode(question);
+	        para.appendChild(node);
+	        text.replaceWith(para);
+	        para.setAttribute("id", "question");
 				}
 
 				function pageShowAnswer(name) {
 					var x = document.createElement("DIV");
 					x.setAttribute("id", "answerEnlarge");
 				}
+
+				function pageShowInputBox() {
+	        var section = document.getElementById("inputSection");
+	        var textBox = document.createElement("textarea");
+	        var joinButton = document.getElementById("joinGame");
+	        textBox.setAttribute("class", "form-control col-11");
+	        textBox.setAttribute("rows", "3");
+	        textBox.setAttribute("placeholder", "Your Answer:");
+	        section.appendChild(textBox);
+	        joinButton.remove(joinButton);
+	      }
 
 				function pageHideAnswer(name) {
 					var x = document.createElement("DIV");
@@ -219,21 +290,16 @@
 				function pageAddAnswer(user, answer) {
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
-
 					var newUser = document.createElement("h3");
 					var newDiv = document.createElement("div");
-
 					newDiv.setAttribute("class", "p-2  pre-scrollable col m-1 rounded border");
 					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
-
 					var para = document.createElement("p");
 					para.setAttribute("class", "p-2");
 					var answerText = document.createTextNode(answer);
 					var userText = document.createTextNode(user);
-
 					newUser.appendChild(userText);
 					newDiv.appendChild(newUser);
-
 					para.appendChild(answerText);
 					newDiv.appendChild(para);
 					section.appendChild(newDiv);
