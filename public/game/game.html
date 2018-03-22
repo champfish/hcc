@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-			<div id="inputSection" class="justify-content-center mb-1 col-12 ml-2 p-2 row">
+			<div id="inputSection" class="justify-content-center mb-1 p-1 row">
 				<button id="joinGame" type="button" style="background-color: #FFB9B9" class="text-white btn btn-lg " data-toggle="modal" data-target="#secondModal">Join Game</button>
 	      <div class="modal fade" id="secondModal">
 	         <div class="modal-dialog">
@@ -80,8 +80,6 @@
 				 </div>
 			 </div>
 		 </div>
-
-
 
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -282,7 +280,7 @@
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
 	        var joinButton = document.getElementById("joinGame");
-	        textBox.setAttribute("class", "form-control col-11");
+	        textBox.setAttribute("class", "form-control col-sm-11  col-md-11");
 	        textBox.setAttribute("rows", "3");
 	        textBox.setAttribute("placeholder", "Your Answer:");
 	        section.appendChild(textBox);
