@@ -19,15 +19,27 @@ var games = new Map();
 io.on('connection', function(socket){
 	// request to join the room with the given name
 	socket.on('joinRoom', function(name, callback){
-		joinRoom(socket,name);
-		var game = getGame(socket);
-		callback(game);
+		console.log('joinRoom');
+		joinRoom(socket,name, function(){
+			createGame("owner",socket,function(){
+				var game = getGame(socket);
+				// console.log(getPublicGame(game));
+				callback(getPublicGame(game));
+			});
+
+		});
+
 	});
 
 	// request to create a game
 	socket.on('createGame', function(questionerMode){
+	}
+	);
+
+	function createGame(questionerMode,socket,callback){
+		console.log('createGame');
 		if(!games.get(getRoom(socket))){
-			var game;
+			var game = {};
 			game.room = getRoom(socket);
 			game.owner = socket;
 			game.questioner = socket;
@@ -38,14 +50,20 @@ io.on('connection', function(socket){
 			game.ongoing = true;
 			game.answers = []; // answers have text (String) and player (Player)
 			game.question = "Waiting...";
+			console.log('++++'+game.room);
 			games.set(game.room, game);
-			roomPing(game);
+			callback();
 		}
-	});
+	}
+	
 
 	// request to join the game
 	socket.on('joinGame', function(player){
+		console.log('joinGame');
 		var game = getGame(socket);
+		if(game==null){
+			console.log('NULLGAME');
+		}
 		player.socket = socket;
 		game.players.push(player);
 		roomPing(game);
@@ -53,6 +71,7 @@ io.on('connection', function(socket){
 
 	// request to add a certain action (String) to a player's reacts (array)
 	socket.on('react', function(player,action){
+		console.log('react');
 	var p = getPlayerBySocket(player.socket);
 	p.push(action);
 	//	var game = getGame(socket);
@@ -66,8 +85,11 @@ io.on('connection', function(socket){
 
 	// request from the questioner to ask a question
 	socket.on('submitAnswer', function(answer){
+		console.log('submitAnswer222222222222222222');
 		var game = getGame(socket);
 		var player = getPlayerBySocket(socket);
+		console.log('DILDO');
+		console.log(player);
 		var answer = {text:answer, player: player};
 		game.answers.push(answer);
 		roomPing(game);
@@ -75,6 +97,7 @@ io.on('connection', function(socket){
 
 	// request from the questioner to ask a question
 	socket.on('askQuestion', function(question){
+		console.log('askQuestion');
 		var game = getGame(socket);
 		if(auth(game.questioner,socket)){
 			game.question = question;
@@ -84,6 +107,7 @@ io.on('connection', function(socket){
 
 	// request to move on to the next question
 	socket.on('nextQuestion', function(){
+		console.log('nextQuestion');
 		var game = getGame(socket);
 		if(auth(game.owner,socket)){
 			switch(questionerMode){
@@ -106,6 +130,7 @@ io.on('connection', function(socket){
 
 	// request to end the game
 	socket.on('endGame', function(){
+		console.log('endGame');
 		var game = getGame(socket);
 		if(auth(game.owner,socket)){
 			game.ongoing = false;
@@ -120,8 +145,15 @@ io.on('connection', function(socket){
 
 	// sents updated game info to all connected clients
 	function roomPing(game){
+		console.log('roomPing');
 		game.time = Date.now();
-		io.sockets.in(game.room).emit('roomPing',game);
+		var room = game.room;
+		console.log('0');
+		var roomSockets = io.sockets.in(room);
+		console.log('1');
+		var publicGame = getPublicGame(game);
+		console.log('lastKnown');
+		roomSockets.emit('roomPing',getPublicGame(game));
 	}
 
 
@@ -134,28 +166,39 @@ http.listen(port, function(){
 
 // returns true if the two sockets are the same, else false
 function auth(socketA, socketB){
+	console.log('auth');
 	return(socketA == socketB);
 }
 
 // returns the room the socket is in
 function getRoom(socket){
+	console.log('getRoom');
 	var roomKeys = Object.keys(socket.rooms);
 	return roomKeys[1];
 }
 
 // get the game the socket is in
 function getGame(socket){
-	return games.get(getRoom(socket));
+	console.log('getGame');
+	//console.log(games);
+	var game =  games.get(getRoom(socket));
+	return game;
 }
 
 // leaves any previous room and the room name selected
-function joinRoom(socket,name){
+function joinRoom(socket,name,callback){
+	console.log('joinRoom');
+	console.log('joining '+ name);
 	socket.leave(getRoom(socket));
-	socket.join(name);
+	socket.join(name, function(){
+		console.log(Object.keys(socket.rooms));
+		callback();
+	});
 }
 
 // returns the player object of the socket
 function getPlayerBySocket(socket){
+	console.log('getPlayerBySocket');
 	var game = getGame(socket);
 	var players = game.players;
 	for(i = 0; i<players.length; i++ ){
@@ -163,6 +206,23 @@ function getPlayerBySocket(socket){
 			return players[i];
 		}
 	}
+}
+
+
+function getPublicGame(game){
+	console.log('getPublicGame');
+		var publicGame = {};
+		publicGame.players = game.players;
+		for(var i =0;i<publicGame.players.length;i++){
+			publicGame.players[i].socket = null;
+		}
+		publicGame.roundIndex = game.roundIndex;
+		publicGame.time = game.time;
+		publicGame.ongoing = game.ongoing;
+		publicGame.answers = game.answers;
+		publicGame.question = game.question;
+		// console.log(publicGame);
+		return publicGame;
 }
 
 // 	WATSON DEEP LEARNING
