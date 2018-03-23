@@ -183,8 +183,16 @@
 				 * Questioner Functions
 				*/
 				function askQuestion(question){
+					console.log('askQuestion');
+					console.log(question);
 					socket.emit('askQuestion',question);
 				}
+
+				socket.on('isQuestioner',function(is){
+					if(is){
+						pageNewQuestionButton();
+					}
+				});
 
 				/*
 				 * Owner Functions
@@ -197,7 +205,7 @@
 				}
 
 				// requests to go to the next question
-				function nextQuestion(){
+				function nextQuestion(question){
 					socket.emit('nextQuestion');
 				}
 
@@ -256,10 +264,8 @@
       			}
 
 						function pageSubmitQuestion(){
-							var question = document.getElementById("newQuestion").value;
-							pageNewQuestion(question);
-
-
+							console.log('pageSubmitQuestion');
+							askQuestion(document.getElementById("newQuestion").value);
 						}
 
 				function pageNewQuestionButton(){
@@ -294,7 +300,7 @@
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
 	        var joinButton = document.getElementById("joinGame");
-	        textBox.setAttribute("class", "form-control col-sm-11  col-md-11");
+	        textBox.setAttribute("class", "form-control col-sm-11 col-md-11");
 	        textBox.setAttribute("rows", "3");
 	        textBox.setAttribute("id","AnswerBox");
 	        textBox.setAttribute("placeholder", "Your Answer");
@@ -304,6 +310,7 @@
 				var code = e.keyCode ? e.keyCode : e.which;
 				if (code == 13) {  // Enter keycode
 					var answer = document.getElementById("AnswerBox").value;
+					document.getElementById("AnswerBox").value = "";
 					submitAnswer(answer);
 				   }
 				});

@@ -19,6 +19,7 @@ var games = new Map();
 io.on('connection', function(socket){
 	// request to join the room with the given name
 	socket.on('joinRoom', function(name, callback){
+		console.log('====================='+name);
 		console.log('joinRoom');
 		joinRoom(socket,name, function(){
 			createGame("owner",socket,function(){
@@ -43,6 +44,7 @@ io.on('connection', function(socket){
 			game.room = getRoom(socket);
 			game.owner = socket;
 			game.questioner = socket;
+			game.questioner.emit('isQuestioner',true); // notify new questioner
 			game.questionerMode = questionerMode;
 			game.players = []; // player has name (String), socket (socket), reacts (array)
 			game.roundIndex = 0;
@@ -52,8 +54,8 @@ io.on('connection', function(socket){
 			game.question = "Waiting...";
 			console.log('++++'+game.room);
 			games.set(game.room, game);
-			callback();
 		}
+		callback();
 	}
 	
 
@@ -83,16 +85,15 @@ io.on('connection', function(socket){
 	//	}
 	});
 
-	// request from the questioner to ask a question
+	// request from the a user to submit an answer
 	socket.on('submitAnswer', function(answer){
-		console.log('submitAnswer222222222222222222');
+		console.log('=======================');
 		var game = getGame(socket);
 		var player = getPlayerBySocket(socket);
-		console.log('DILDO');
-		console.log(player);
-		var answer = {text:answer, player: player};
+		var answer = {text:answer, name: player.name};
 		game.answers.push(answer);
 		roomPing(game);
+		console.log('done');
 	});
 
 	// request from the questioner to ask a question
@@ -101,8 +102,9 @@ io.on('connection', function(socket){
 		var game = getGame(socket);
 		if(auth(game.questioner,socket)){
 			game.question = question;
+			game.answers=[];
+			roomPing(game);
 		}
-		roomPing(game);
 	});
 
 	// request to move on to the next question
@@ -110,6 +112,7 @@ io.on('connection', function(socket){
 		console.log('nextQuestion');
 		var game = getGame(socket);
 		if(auth(game.owner,socket)){
+			game.questioner.emit('isQuestioner',true); // notify new questioner
 			switch(questionerMode){
 				case "owner":
 					game.questioner = game.owner;
@@ -125,6 +128,7 @@ io.on('connection', function(socket){
 
 			}
 		}
+		game.questioner.emit('isQuestioner',true); // notify new questioner
 		roomPing(game);
 	});
 
@@ -148,11 +152,8 @@ io.on('connection', function(socket){
 		console.log('roomPing');
 		game.time = Date.now();
 		var room = game.room;
-		console.log('0');
 		var roomSockets = io.sockets.in(room);
-		console.log('1');
 		var publicGame = getPublicGame(game);
-		console.log('lastKnown');
 		roomSockets.emit('roomPing',getPublicGame(game));
 	}
 
@@ -172,14 +173,12 @@ function auth(socketA, socketB){
 
 // returns the room the socket is in
 function getRoom(socket){
-	console.log('getRoom');
 	var roomKeys = Object.keys(socket.rooms);
 	return roomKeys[1];
 }
 
 // get the game the socket is in
 function getGame(socket){
-	console.log('getGame');
 	//console.log(games);
 	var game =  games.get(getRoom(socket));
 	return game;
@@ -201,6 +200,8 @@ function getPlayerBySocket(socket){
 	console.log('getPlayerBySocket');
 	var game = getGame(socket);
 	var players = game.players;
+	console.log(players[0].name);
+	//return players[0];
 	for(i = 0; i<players.length; i++ ){
 		if(auth(socket,players[i].socket)){
 			return players[i];
@@ -212,9 +213,11 @@ function getPlayerBySocket(socket){
 function getPublicGame(game){
 	console.log('getPublicGame');
 		var publicGame = {};
-		publicGame.players = game.players;
-		for(var i =0;i<publicGame.players.length;i++){
-			publicGame.players[i].socket = null;
+		publicGame.players = [];
+		for(var i =0;i<game.players.length;i++){
+			publicGame.players[i] = {};
+			publicGame.players[i].name = game.players[i].name;
+			publicGame.players[i].reacts = game.players[i].reacts;
 		}
 		publicGame.roundIndex = game.roundIndex;
 		publicGame.time = game.time;
