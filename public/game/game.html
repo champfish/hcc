@@ -17,17 +17,17 @@
 					<div class="d-none d-md-block d-md-block col-md-2 flex-wrap" id="question-image" >
 						<img src="/Users/s129527/Downloads/crowlogo.png" class=" ml-4 rounded" width="95vh" style=" max-width: 100%">
 					</div>
-					<div	class="p-1 col-md-9 rounded ">
-						<div id="questionContainer" class="col-md-12 pre-scrollable  rounded" style=" height:13vh; background-color: #E4E4E4 ">
-							<p id="question">		Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
+					<div	class="p-1 col-md-9 rounded " style="overflow: hidden">
+						<div id="questionContainer" class="col-md-12 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
+							<p id="question">	Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
 					</div>
 					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
-						<div id="answerSection" class="d-flex text-white mb-1 align-content-stretch flex-wrap bd-highlight " style="" >
+						<div id="answerSection" class="d-flex text-secondary mb-1 align-content-stretch flex-wrap bd-highlight " style="" >
 						</div>
 					</container>
 				</div>
-				<div id="tableSection" class="col-sm-3 rounded " style=" ">
+				<div id="tableSection" class="d-none d-lg-block col-sm-12 col-lg-3 rounded" style=" ">
 					<div class="mt-3  rounded-top text-truncate text-center ml-4" style="background-color: #E4E4E4">
 						<h3>Users</h3>
 					</div>
@@ -35,7 +35,8 @@
 					</div>
 				</div>
 			</div>
-			<div id="inputSection" class="justify-content-center mb-1 col-12 ml-2 p-2 row">
+		</div>
+			<div id="inputSection" class="justify-content-center mb-1 p-1 mr-0 row">
 				<button id="joinGame" type="button" style="background-color: #FFB9B9" class="text-white btn btn-lg " data-toggle="modal" data-target="#secondModal">Join Game</button>
 	      <div class="modal fade" id="secondModal">
 	         <div class="modal-dialog">
@@ -46,15 +47,21 @@
 	             </div>
 	             <div class="modal-body">
 	               <div class="form-group">
-	   					 			<input type="text" placeholder="Name" class="form-control" id="usr">
+	   					 			<input type="text" placeholder="Name" class="form-control" id="usr" autofocus>
 	               </div>
 	             </div>
 	             <div class="modal-footer">
-	               <button type="button" class="btn" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
-	             </div>
+	               <button type="button" class="btn text-white" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
 	           </div>
 	         </div>
 	       </div>
+			</div>
+		</div>
+		<div id="tableSection2" class="d-sm-block d-lg-none col-sm-12 rounded" style=" ">
+			<div class="mt-3 rounded-top text-truncate text-center mb-3" style="background-color: #E4E4E4">
+			<h3>Users</h3>
+			</div>
+			<div id="userTable2" class=" rounded-bottom  pre-scrollable text-truncate text-center" style="max-height: 475px ;background-color: #E4E4E4">
 			</div>
 		</div>
 		<div class="modal fade" id="firstModal">
@@ -62,18 +69,17 @@
 				 <div class="modal-content">
 					 <div class="modal-header">
 						 <h4 class="modal-title">Enter the Next Question</h4>
-						 <button type="button" class="close" data-dismiss="modal"> </button>
+						 <button type="button" class="text-white close" data-dismiss="modal"> </button>
 					 </div>
 					 <div class="modal-body">
-						 <textarea id="newQuestion" class="form-control" rows="3" placeholder="Question" ></textarea>
+						 <textarea id="newQuestion" class="form-control" rows="3" placeholder="Question" autofocus></textarea>
 					 </div>
 					 <div class="modal-footer">
-						 <button type="button" style="background-color: #FFB9B9" class="btn " data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
+						 <button type="button" style="background-color: #FFB9B9" class="btn text-white" data-dismiss="modal" onclick="pageSubmitQuestion()">Submit</button>
 					 </div>
 				 </div>
 			 </div>
 		 </div>
-
 
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -217,6 +223,11 @@
 					document.getElementById("userTable").appendChild(userText);
 					userText.setAttribute("class","m-2 font-weight-light ");
 					userText.setAttribute("style","background-color: #E4E4E4");
+					var userText2 = document.createElement("p");
+	        var text2 = document.createTextNode(name);
+	        userText2.appendChild(text2);
+	        document.getElementById("userTable2").appendChild(userText2);
+	        userText2.setAttribute("class","  m-2 font-weight-light ");
 				}
 
 				function pageRemoveUser(name) {
@@ -242,7 +253,8 @@
 					var button = document.createElement("button");
 					var node = document.createTextNode("Submit New Question");
 					button.setAttribute("type", "button");
-					button.setAttribute("class", "btn mb-3 btn-primary");
+					button.setAttribute("class", "btn mb-3 text-white");
+					button.setAttribute("style", "background-color: #FFb9b9");
 					button.setAttribute("data-toggle", "modal");
 					button.setAttribute("data-target", "#firstModal");
 					container.appendChild(button);
@@ -268,7 +280,7 @@
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
 	        var joinButton = document.getElementById("joinGame");
-	        textBox.setAttribute("class", "form-control col-11");
+	        textBox.setAttribute("class", "form-control col-sm-11  col-md-11");
 	        textBox.setAttribute("rows", "3");
 	        textBox.setAttribute("placeholder", "Your Answer:");
 	        section.appendChild(textBox);
