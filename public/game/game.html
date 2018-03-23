@@ -15,7 +15,7 @@
 			<div class="row">
 				<div id="body" class=" mt-3 ml-1 row col-lg-9 container-fluid">
 					<div class="d-none d-md-block d-md-block col-md-2 flex-wrap" id="question-image" >
-						<img src="/Users/s129527/Downloads/crowlogo.png" class=" ml-4 rounded" width="95vh" style=" max-width: 100%">
+						<img src="res/crowlogo.png" class=" ml-4 rounded" width="95vh" style=" max-width: 100%">
 					</div>
 					<div	class="p-1 col-md-9 rounded " style="overflow: hidden">
 						<div id="questionContainer" class="col-md-12 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
@@ -51,7 +51,7 @@
 	               </div>
 	             </div>
 	             <div class="modal-footer">
-	               <button type="button" class="btn text-white" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageShowInputBox()">Join</button>
+	               <button type="button" class="btn text-white" style="background-color: #FFB9B9" data-dismiss="modal" onclick="pageJoinGame()">Join</button>
 	           </div>
 	         </div>
 	       </div>
@@ -99,7 +99,8 @@
 				// joins the socket room for the game
 				function joinRoom(){
 					socket.emit('joinRoom',getURL(), function(game){
-					update(game);
+						console.log(game);
+						g = game;
 					});
 				}
 
@@ -110,8 +111,11 @@
 
 				// the server's ping of game data
 				socket.on('roomPing', function(game){
-					if(game.time>g.time){
-					update(game);
+					console.log('ping!');
+					console.log(game.time);
+					console.log(g.time);
+					if(game.time>=g.time){
+						update(game);
 					}
 				});
 
@@ -159,7 +163,7 @@
 				// requests to join a game
 				function joinGame(playerName){
 					var player = {name: playerName};
-					//player.name = playerName;
+					player.name = playerName;
 					player.reacts = [];
 					socket.emit('joinGame',player);
 				}
@@ -171,6 +175,7 @@
 
 				// request to submit user answer
 				function submitAnswer(answer){
+					console.log(answer);
 					socket.emit('submitAnswer', answer);
 				}
 
@@ -178,8 +183,16 @@
 				 * Questioner Functions
 				*/
 				function askQuestion(question){
+					console.log('askQuestion');
+					console.log(question);
 					socket.emit('askQuestion',question);
 				}
+
+				socket.on('isQuestioner',function(is){
+					if(is){
+						pageNewQuestionButton();
+					}
+				});
 
 				/*
 				 * Owner Functions
@@ -192,7 +205,7 @@
 				}
 
 				// requests to go to the next question
-				function nextQuestion(){
+				function nextQuestion(question){
 					socket.emit('nextQuestion');
 				}
 
@@ -206,14 +219,23 @@
 				*/
 				function pageSetUsers(users){
 					pageRemoveAllUsers();
+					for(var i=0;i<users.length;i++){
+						pageAddUser(users[i].name);
+					}
 				}
 
 				function pageSetAnswers(answers){
 					pageRemoveAllAnswers();
+					for(var i =0;i<answers.length;i++){
+						console.log(answers[i]);
+						pageAddAnswer(answers[i].name,answers[i].text);
+					}
 				}
 
 				function pageJoinGame() {
+					pageShowInputBox();
 					var user = document.getElementById("usr").value;
+					joinGame(user);
 				}
 
 				function pageAddUser(name) {
@@ -242,10 +264,8 @@
       			}
 
 						function pageSubmitQuestion(){
-							var question = document.getElementById("newQuestion").value;
-							pageNewQuestion(question);
-
-
+							console.log('pageSubmitQuestion');
+							askQuestion(document.getElementById("newQuestion").value);
 						}
 
 				function pageNewQuestionButton(){
@@ -280,11 +300,20 @@
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
 	        var joinButton = document.getElementById("joinGame");
-	        textBox.setAttribute("class", "form-control col-sm-11  col-md-11");
+	        textBox.setAttribute("class", "form-control col-sm-11 col-md-11");
 	        textBox.setAttribute("rows", "3");
-	        textBox.setAttribute("placeholder", "Your Answer:");
+	        textBox.setAttribute("id","AnswerBox");
+	        textBox.setAttribute("placeholder", "Your Answer");
 	        section.appendChild(textBox);
 	        joinButton.remove(joinButton);
+	        $("textarea").keyup(function(e) {
+				var code = e.keyCode ? e.keyCode : e.which;
+				if (code == 13) {  // Enter keycode
+					var answer = document.getElementById("AnswerBox").value;
+					document.getElementById("AnswerBox").value = "";
+					submitAnswer(answer);
+				   }
+				});
 	      }
 
 				function pageHideAnswer(name) {
@@ -304,7 +333,7 @@
 					var section = document.getElementById("answerSection");
 					var newUser = document.createElement("h3");
 					var newDiv = document.createElement("div");
-					newDiv.setAttribute("class", "p-2  pre-scrollable col m-1 rounded border");
+					newDiv.setAttribute("class", "p-2 col m-1 rounded border");
 					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
 					var para = document.createElement("p");
 					para.setAttribute("class", "p-2");
@@ -318,8 +347,7 @@
 					container.appendChild(section);
 				}
 
-
-				joinRoom();
+				joinRoom();						
 		</script>
 	</body>
 </html>
