@@ -232,12 +232,14 @@
 					}
 				}
 
+					// pageJoinGame: registers user and allows them to answer
 				function pageJoinGame() {
 					pageShowInputBox();
 					var user = document.getElementById("usr").value;
 					joinGame(user);
 				}
 
+					// pageAddUser: adds a user to the game and to user list
 				function pageAddUser(name) {
 					var userText = document.createElement("p");
 					var text = document.createTextNode(name);
@@ -252,10 +254,12 @@
 	        userText2.setAttribute("class","  m-2 font-weight-light ");
 				}
 
+					// pageRemoveUser: takes user out of game and of user list
 				function pageRemoveUser(name) {
 					document.getElementById("LMAO SORRY CJ").remove();
 				}
 
+					// pageRemoveAllUsers: clears all users
 				function pageRemoveAllUsers(){
         			var userList = document.getElementById("userTable");
         			while (userList.hasChildNodes()) {
@@ -263,11 +267,13 @@
         			}
       			}
 
+					// pageSubmitQuestion: makes the input text into the new question value
 						function pageSubmitQuestion(){
 							console.log('pageSubmitQuestion');
 							askQuestion(document.getElementById("newQuestion").value);
 						}
 
+					// pageNewQuestionButton: Gives the option as a button for a modal asking for a new question
 				function pageNewQuestionButton(){
 					var container = document.getElementById("questionContainer");
 					var button = document.createElement("button");
@@ -281,6 +287,7 @@
 					button.appendChild(node);
 				}
 
+					//  pageNewQuestion: changes the question text
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
 	        var text = document.getElementById("question");
@@ -291,11 +298,13 @@
 	        para.setAttribute("id", "question");
 				}
 
+					// pageShowAnswer: adds a modal to show the entirety of a question
 				function pageShowAnswer(name) {
 					var x = document.createElement("DIV");
 					x.setAttribute("id", "answerEnlarge");
 				}
 
+					// pageShowInputBox: removes the joinButton and adds the answer input box
 				function pageShowInputBox() {
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
@@ -316,11 +325,7 @@
 				});
 	      }
 
-				function pageHideAnswer(name) {
-					var x = document.createElement("DIV");
-					x.setAttribute("id", "answerEnlarge");
-				}
-
+					// pageRemoveAllAnswers: Clears all answers
 				function pageRemoveAllAnswers() {
         			var section = document.getElementById("answerSection");
         			while (section.hasChildNodes()) {
@@ -328,6 +333,7 @@
         			}
      			}
 
+					// pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
 				function pageAddAnswer(user, answer) {
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
@@ -347,7 +353,7 @@
 					container.appendChild(section);
 				}
 
-				joinRoom();						
+				joinRoom();
 		</script>
 	</body>
 </html>
