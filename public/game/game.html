@@ -26,6 +26,22 @@
 						<div id="answerSection" class="d-flex text-secondary mb-1 align-content-stretch flex-wrap bd-highlight " style="" >
 						</div>
 					</container>
+					<div class="modal fade" id="answerModal">
+						 <div class="modal-dialog modal-lg">
+							 <div class="modal-content">
+								 <div id="answerUserModal" class="modal-header">
+									 <button type="button" class="close" data-dismiss="modal"> </button>
+								 </div>
+								 <div id="answerModalBody" class="modal-body">
+									<div class="form-group">
+									</div>
+								 </div>
+								 <div class="modal-footer">
+									 <button type="button" style="background-color: #FFB9B9" class="btn " data-dismiss="modal">close</button>
+								 </div>
+							 </div>
+						 </div>
+					 </div>
 				</div>
 				<div id="tableSection" class="d-none d-lg-block col-sm-12 col-lg-3 rounded" style=" ">
 					<div class="mt-3  rounded-top text-truncate text-center ml-4" style="background-color: #E4E4E4">
@@ -224,6 +240,7 @@
 					}
 				}
 
+					// pageSetAnswers: adds the answers to an array
 				function pageSetAnswers(answers){
 					pageRemoveAllAnswers();
 					for(var i =0;i<answers.length;i++){
@@ -232,12 +249,14 @@
 					}
 				}
 
+					// pageJoinGame: registers user and allows them to answer
 				function pageJoinGame() {
 					pageShowInputBox();
 					var user = document.getElementById("usr").value;
 					joinGame(user);
 				}
 
+					// pageAddUser: adds a user to the game and to user list
 				function pageAddUser(name) {
 					var userText = document.createElement("p");
 					var text = document.createTextNode(name);
@@ -252,10 +271,12 @@
 	        userText2.setAttribute("class","  m-2 font-weight-light ");
 				}
 
+					// pageRemoveUser: takes user out of game and of user list
 				function pageRemoveUser(name) {
 					document.getElementById("LMAO SORRY CJ").remove();
 				}
 
+					// pageRemoveAllUsers: clears all users
 				function pageRemoveAllUsers(){
         			var userList = document.getElementById("userTable");
         			while (userList.hasChildNodes()) {
@@ -263,11 +284,13 @@
         			}
       			}
 
+					// pageSubmitQuestion: makes the input text into the new question value
 						function pageSubmitQuestion(){
 							console.log('pageSubmitQuestion');
 							askQuestion(document.getElementById("newQuestion").value);
 						}
 
+					// pageNewQuestionButton: Gives the option as a button for a modal asking for a new question
 				function pageNewQuestionButton(){
 					var container = document.getElementById("questionContainer");
 					var button = document.createElement("button");
@@ -281,6 +304,7 @@
 					button.appendChild(node);
 				}
 
+					//  pageNewQuestion: changes the question text
 				function pageNewQuestion(question) {
 					var container = document.getElementById("questionContainer");
 	        var text = document.getElementById("question");
@@ -291,11 +315,13 @@
 	        para.setAttribute("id", "question");
 				}
 
+					// pageShowAnswer: adds a modal to show the entirety of a question
 				function pageShowAnswer(name) {
 					var x = document.createElement("DIV");
 					x.setAttribute("id", "answerEnlarge");
 				}
 
+					// pageShowInputBox: removes the joinButton and adds the answer input box
 				function pageShowInputBox() {
 	        var section = document.getElementById("inputSection");
 	        var textBox = document.createElement("textarea");
@@ -316,11 +342,7 @@
 				});
 	      }
 
-				function pageHideAnswer(name) {
-					var x = document.createElement("DIV");
-					x.setAttribute("id", "answerEnlarge");
-				}
-
+					// pageRemoveAllAnswers: Clears all answers
 				function pageRemoveAllAnswers() {
         			var section = document.getElementById("answerSection");
         			while (section.hasChildNodes()) {
@@ -328,13 +350,17 @@
         			}
      			}
 
+					// pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
 				function pageAddAnswer(user, answer) {
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
 					var newUser = document.createElement("h3");
 					var newDiv = document.createElement("div");
+					pageEnlargeAnswer(user, answer);
 					newDiv.setAttribute("class", "p-2 col m-1 rounded border");
 					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
+					newDiv.setAttribute("data-toggle", "modal");
+	        newDiv.setAttribute("data-target", "#answerModal");
 					var para = document.createElement("p");
 					para.setAttribute("class", "p-2");
 					var answerText = document.createTextNode(answer);
@@ -347,7 +373,28 @@
 					container.appendChild(section);
 				}
 
-				joinRoom();						
+					// pageEnlargeAnswer: creates a popup to show the entirety of an answer
+				function pageEnlargeAnswer(user, answer) {
+	        var nameHeader = document.getElementById("answerUserModal");
+	        while (nameHeader.hasChildNodes()) {
+	          nameHeader.removeChild(nameHeader.firstChild);
+	        }
+	        var nameSection = document.createElement("h4");
+	        var bodySection = document.getElementById("answerModalBody");
+	        while (bodySection.hasChildNodes()) {
+	          bodySection.removeChild(bodySection.firstChild);
+	        }
+	        nameSection.setAttribute("class", "modal-title");
+	        var nameText = document.createTextNode(user);
+	        var answerTextBox = document.createElement("p");
+	        var answerText = document.createTextNode(answer);
+	        answerTextBox.appendChild(answerText);
+	        bodySection.appendChild(answerTextBox);
+	        nameHeader.appendChild(nameSection);
+	        nameSection.appendChild(nameText);
+	      }
+
+				joinRoom();
 		</script>
 	</body>
 </html>
