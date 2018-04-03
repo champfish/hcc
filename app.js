@@ -17,31 +17,54 @@ var games = new Map();
 
 // connection 
 io.on('connection', function(socket){
+	// return true if game exists, false otherwise
+	socket.on('gameExists', function(name,callback){
+		console.log('INITTTTTTTTTTTT');
+		callback(gameExists(name));
+	});
+
+	// returns true if game with given name exists, false otherwise
+	function gameExists(name){
+		for(var i =0; i<games.length; i++){
+			if(games[i].room == name){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	// request to join the room with the given name
 	socket.on('joinRoom', function(name, callback){
-		console.log('====================='+name);
+		console.log('Joining: '+name);
 		console.log('joinRoom');
+		
 		joinRoom(socket,name, function(){
-			createGame("owner",socket,function(){
-				var game = getGame(socket);
+			//createGame("owner",socket,name,function(){
+			//	var game = getGame(socket);
 				// console.log(getPublicGame(game));
-				callback(getPublicGame(game));
-			});
-
+			//	callback(getPublicGame(game));
+			//});
 		});
 
 	});
 
 	// request to create a game
-	socket.on('createGame', function(questionerMode){
-	}
-	);
+	socket.on('createGame', function(questionerMode, name, callback){
+			createGame("owner",socket,name, function(){
+				callback();
+			});
+		}); 
 
-	function createGame(questionerMode,socket,callback){
+
+	// creates room if not already created
+	function createGame(questionerMode,socket,name,callback){
 		console.log('createGame');
 		if(!games.get(getRoom(socket))){
+			console.log("ACTUALLYCREATINGGAMEHERE");
 			var game = {};
-			game.room = getRoom(socket);
+			//game.room = getRoom(socket);
+			game.room = name;
 			game.owner = socket;
 			game.questioner = socket;
 			game.questioner.emit('isQuestioner',true); // notify new questioner
@@ -52,7 +75,6 @@ io.on('connection', function(socket){
 			game.ongoing = true;
 			game.answers = []; // answers have text (String) and player (Player)
 			game.question = "Waiting...";
-			console.log('++++'+game.room);
 			games.set(game.room, game);
 		}
 		callback();
@@ -87,7 +109,6 @@ io.on('connection', function(socket){
 
 	// request from the a user to submit an answer
 	socket.on('submitAnswer', function(answer){
-		console.log('=======================');
 		var game = getGame(socket);
 		var player = getPlayerBySocket(socket);
 		var answer = {text:answer, name: player.name};
@@ -187,7 +208,7 @@ function getGame(socket){
 // leaves any previous room and the room name selected
 function joinRoom(socket,name,callback){
 	console.log('joinRoom');
-	console.log('joining '+ name);
+	console.log('joining room: '+ name);
 	socket.leave(getRoom(socket));
 	socket.join(name, function(){
 		console.log(Object.keys(socket.rooms));

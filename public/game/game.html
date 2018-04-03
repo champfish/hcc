@@ -108,11 +108,28 @@
 				var socket = io();
 				var g;
 
+				// joinRoom if room exists, else prompts to create game
+				function init(){
+					socket.emit('gameExists',getURL(), function(exists){
+						console.log(exists);
+						if(exists){
+							joinRoom();
+						}else{
+							console.log('creatGame');
+							// prompt game options
+							createGame('owner', function(){
+								joinRoom();
+							});
+						}
+					});
+				}
+
 				/*
 				 * Room Functions
 				*/
 				// joins the socket room for the game
 				function joinRoom(){
+					console.log('joinRoom');
 					socket.emit('joinRoom',getURL(), function(game){
 						console.log(game);
 						g = game;
@@ -215,8 +232,10 @@
 
 				// requests to create a game
 				// questionerMode - the mode of how the questioner changes owner/random/sequential
-				function createGame(questionerMode){
-					socket.emit('createGame', questionerMode);
+				function createGame(questionerMode, callback){
+					socket.emit('createGame', questionerMode, getURL(), function(){
+						callback();
+					});
 				}
 
 				// requests to go to the next question
@@ -393,7 +412,8 @@
 	        nameSection.appendChild(nameText);
 	      }
 
-				joinRoom();
+				//joinRoom();
+				init();
 		</script>
 	</body>
 </html>
