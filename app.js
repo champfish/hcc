@@ -20,30 +20,35 @@ io.on('connection', function(socket){
 	// return true if game exists, false otherwise
 	socket.on('gameExists', function(name,callback){
 		console.log('INITTTTTTTTTTTT');
+		console.log(gameExists(name));
 		callback(gameExists(name));
 	});
 
 	// returns true if game with given name exists, false otherwise
 	function gameExists(name){
-		for(var i =0; i<games.length; i++){
-			if(games[i].room == name){
-				return true;
-			}
+		//console.log((games));
+		for(var key in games){
+			console.log(key);
 		}
+ 		Object.keys(games).forEach(function(key) {
+ 			console.log('KEY');
+		    console.log(key);
+		    if(key  == name){
+		    	return true;
+		    }
+		});
 		return false;
 	}
 
 
 	// request to join the room with the given name
 	socket.on('joinRoom', function(name, callback){
-		console.log('Joining: '+name);
-		console.log('joinRoom');
-		
+		console.log('Joining Room: '+name);		
 		joinRoom(socket,name, function(){
 			//createGame("owner",socket,name,function(){
-			//	var game = getGame(socket);
+			var game = getGame(socket);
 				// console.log(getPublicGame(game));
-			//	callback(getPublicGame(game));
+			callback(getPublicGame(game));
 			//});
 		});
 
@@ -174,7 +179,6 @@ io.on('connection', function(socket){
 		game.time = Date.now();
 		var room = game.room;
 		var roomSockets = io.sockets.in(room);
-		var publicGame = getPublicGame(game);
 		roomSockets.emit('roomPing',getPublicGame(game));
 	}
 
