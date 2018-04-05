@@ -107,6 +107,7 @@ io.on('connection', function(socket){
 
 	// request from the a user to submit an answer
 	socket.on('submitAnswer', function(answer){
+		console.log('ANSWER GOT');
 		var game = getGame(socket);
 		var player = getPlayerBySocket(socket);
 		var answer = {text:answer, name: player.name};

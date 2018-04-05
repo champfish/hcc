@@ -208,8 +208,8 @@
 
 				// request to submit user answer
 				function submitAnswer(answer){
-					console.log(answer);
 					socket.emit('submitAnswer', answer);
+					console.log(answer);
 				}
 
 				/*
