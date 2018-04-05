@@ -20,23 +20,16 @@ io.on('connection', function(socket){
 	// return true if game exists, false otherwise
 	socket.on('gameExists', function(name,callback){
 		console.log('INITTTTTTTTTTTT');
-		console.log(gameExists(name));
 		callback(gameExists(name));
 	});
 
 	// returns true if game with given name exists, false otherwise
 	function gameExists(name){
-		//console.log((games));
-		for(var key in games){
-			console.log(key);
+		for(var [k,v] of games){
+			if(k==name){
+				return true;
+			}
 		}
- 		Object.keys(games).forEach(function(key) {
- 			console.log('KEY');
-		    console.log(key);
-		    if(key  == name){
-		    	return true;
-		    }
-		});
 		return false;
 	}
 
@@ -119,7 +112,7 @@ io.on('connection', function(socket){
 		var answer = {text:answer, name: player.name};
 		game.answers.push(answer);
 		roomPing(game);
-		console.log('done');
+		console.log('ANSWER SENT');
 	});
 
 	// request from the questioner to ask a question

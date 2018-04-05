@@ -133,6 +133,7 @@
 					socket.emit('joinRoom',getURL(), function(game){
 						console.log(game);
 						g = game;
+						update(game);
 					});
 				}
 
