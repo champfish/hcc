@@ -37,7 +37,7 @@
 									</div>
 								 </div>
 								 <div class="modal-footer">
-									 <button type="button" style="background-color: #FFB9B9" class="btn " data-dismiss="modal">close</button>
+									 <button type="button" style="background-color: #FFB9B9" class="btn text-white" data-dismiss="modal">close</button>
 								 </div>
 							 </div>
 						 </div>
@@ -370,20 +370,25 @@
      			}
 
 					// pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
+					var answerId = 0; // id for each answer
 				function pageAddAnswer(user, answer) {
+		      answerId+=1;
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
 					var newUser = document.createElement("h3");
 					var newDiv = document.createElement("div");
-					pageEnlargeAnswer(user, answer);
+					var para = document.createElement("p");
+					var answerText = document.createTextNode(answer);
+					var userText = document.createTextNode(user);
 					newDiv.setAttribute("class", "p-2 col m-1 rounded border");
 					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
 					newDiv.setAttribute("data-toggle", "modal");
 	        newDiv.setAttribute("data-target", "#answerModal");
-					var para = document.createElement("p");
+					newDiv.setAttribute("user", user);
+	        newDiv.setAttribute("answer", answer);
+					newDiv.setAttribute("id", answerId);
+					newDiv.setAttribute("onclick", "pageAnswerPopup("+ answerId + ")");
 					para.setAttribute("class", "p-2");
-					var answerText = document.createTextNode(answer);
-					var userText = document.createTextNode(user);
 					newUser.appendChild(userText);
 					newDiv.appendChild(newUser);
 					para.appendChild(answerText);
@@ -392,18 +397,20 @@
 					container.appendChild(section);
 				}
 
-					// pageEnlargeAnswer: creates a popup to show the entirety of an answer
-				function pageEnlargeAnswer(user, answer) {
+					// pageAnswerPopup: creates a popup to show the entirety of an answer
+				function pageAnswerPopup(id) {
 	        var nameHeader = document.getElementById("answerUserModal");
-	        while (nameHeader.hasChildNodes()) {
-	          nameHeader.removeChild(nameHeader.firstChild);
-	        }
 	        var nameSection = document.createElement("h4");
 	        var bodySection = document.getElementById("answerModalBody");
-	        while (bodySection.hasChildNodes()) {
+					while (nameHeader.hasChildNodes()) {
+						nameHeader.removeChild(nameHeader.firstChild);
+					}
+					while (bodySection.hasChildNodes()) {
 	          bodySection.removeChild(bodySection.firstChild);
 	        }
 	        nameSection.setAttribute("class", "modal-title");
+					var user = document.getElementById(id).getAttribute("user");
+	        var answer = document.getElementById(id).getAttribute("answer");
 	        var nameText = document.createTextNode(user);
 	        var answerTextBox = document.createElement("p");
 	        var answerText = document.createTextNode(answer);
