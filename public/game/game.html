@@ -138,6 +138,7 @@
 				 </div>
 			 </div>
 		 </div>
+		 <button hidden type="button" id="gameSettingsButton" class="btn btn-primary" data-toggle="modal" data-target="#gameSettingsModal"></button>
 
 
 
@@ -318,6 +319,10 @@
 					var user = document.getElementById("usr").value;
 					joinGame(user);
 				}
+					// pageGameSettingsModal: calls modal for game creator to choose game settings
+				function pageGameSettingsModal() {
+	        document.getElementById("gameSettingsButton").click(); // Click on the checkbox
+	      }
 
 					// pageAddUser: adds a user to the game and to user list
 				function pageAddUser(name) {
