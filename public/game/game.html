@@ -380,8 +380,8 @@
 					var para = document.createElement("p");
 					var answerText = document.createTextNode(answer);
 					var userText = document.createTextNode(user);
-					newDiv.setAttribute("class", "pre-scrollable p-2 col m-1 rounded border");
-					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
+					newDiv.setAttribute("class", " p-2 col m-1 rounded border");
+					newDiv.setAttribute("style", "max-height: 280px; background-color: #E4E4E4;min-width:220px; overflow-y:scroll");
 					newDiv.setAttribute("data-toggle", "modal");
 	        newDiv.setAttribute("data-target", "#answerModal");
 					newDiv.setAttribute("user", user);
