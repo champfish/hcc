@@ -23,7 +23,7 @@
 						</div>
 					</div>
 					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 rounded ">
-						<button type="button" style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >end game</button>
+						<button type="button" onclick=""style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >end game</button>
 
 					</div>
 					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
@@ -137,7 +137,7 @@
 					 </div>
 				 	 </div>
 					 <div class="modal-footer">
-						 <button type="button" data-dismiss="modal" class="btn text-white" style="background-color: #FFB9B9" >Create Game</button>
+						 <button type="button" onclick="" data-dismiss="modal" class="btn text-white" style="background-color: #FFB9B9" >Create Game</button>
 					 </div>
 				 </div>
 			 </div>
@@ -382,7 +382,7 @@
 					var button = document.createElement("button");
 					var node = document.createTextNode("New Question");
 					button.setAttribute("type", "button");
-					button.setAttribute("style", "width:17vh;font-size : 15px; background-color: #FFB9B9");
+					button.setAttribute("style", "font-size : 15px; background-color: #FFB9B9");
 					button.setAttribute("class", "p-2 pr-2 mb-1 btn text-white");
 					button.setAttribute("data-toggle", "modal");
 					button.setAttribute("data-target", "#firstModal");
