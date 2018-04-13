@@ -14,16 +14,15 @@
 			</div>
 			<div class="row">
 				<div id="body" class="mt-3 ml-1 pr-5 row col-lg-9 container-fluid">
-					<div class="d-none d-md-block d-md-block col-md-2 flex-wrap" id="question-image" >
+					<div class="d-none d-md-block col-md-2 flex-wrap" id="question-image" >
 						<img src="res/crowlogo.png" class=" ml-4 rounded " width="95vh" style=" max-width: 95vh">
 					</div>
 					<div	class="p-1 col-lg-9 col-md-8 rounded " style="overflow: hidden">
-						<div id="questionContainer" class="col-lg-12 col-md-12 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
+						<div id="questionContainer" class="col-lg-12 col-xs-10 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
 							<p id="question">	Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
 					</div>
-					<div	class="p-2 col-lg-1 col-md-1 rounded ">
-						<button type="button" style="width:17vh;font-size : 15px; background-color: #FFB9B9" class="p-2 pr-2 mb-1 btn text-white">new question</button>
+					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 rounded ">
 						<button type="button" style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >end game</button>
 
 					</div>
@@ -379,12 +378,12 @@
 
 					// pageNewQuestionButton: Gives the option as a button for a modal asking for a new question
 				function pageNewQuestionButton(){
-					var container = document.getElementById("questionContainer");
+					var container = document.getElementById("sideButtons");
 					var button = document.createElement("button");
-					var node = document.createTextNode("Submit New Question");
+					var node = document.createTextNode("New Question");
 					button.setAttribute("type", "button");
-					button.setAttribute("class", "btn mb-3 text-white");
-					button.setAttribute("style", "background-color: #FFb9b9");
+					button.setAttribute("style", "width:17vh;font-size : 15px; background-color: #FFB9B9");
+					button.setAttribute("class", "p-2 pr-2 mb-1 btn text-white");
 					button.setAttribute("data-toggle", "modal");
 					button.setAttribute("data-target", "#firstModal");
 					container.appendChild(button);
