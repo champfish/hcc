@@ -107,22 +107,22 @@
 					 <div class="modal-body">
 						 Game modes:
 					 <div class="form-check">
-					  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-						<label class="form-check-label" for="exampleRadios1">
-									 Owner
-					  </label>
-					 </div>
-					 <div class="form-check">
-						 <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-						 <label class="form-check-label" for="exampleRadios2">
-									 Random
-						 </label>
-					 </div>
-					 <div class="form-check">
-					 	<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-				 	  <label class="form-check-label" for="exampleRadios2">
-									 Sequential
-					 	</label>
+					 	<input class="form-check-input" type="radio" name="gameModes" id="ownerRadio" value="option1" checked>
+ 						<label class="form-check-label" for="ownerRadio">
+ 							Owner
+ 						</label>
+ 					</div>
+ 					<div class="form-check">
+ 						<input class="form-check-input" type="radio" name="gameModes" id="randomRadio" value="option2">
+ 						<label class="form-check-label" for="randomRadio">
+ 							Random
+ 						</label>
+ 					</div>
+ 					<div class="form-check">
+ 						<input class="form-check-input" type="radio" name="gameModes" id="sequentialRadio" value="option2">
+ 						<label class="form-check-label" for="sequentialRadio">
+ 							Sequential
+ 						</label>
 					 </div>
 					 <p></p>
 					 <div class="form-check">
@@ -322,6 +322,20 @@
 					// pageGameSettingsModal: calls modal for game creator to choose game settings
 				function pageGameSettingsModal() {
 	        document.getElementById("gameSettingsButton").click(); // Click on the checkbox
+	      }
+					//pageCreateGameDialogue: holds game values from the settings
+				function pageCreateGameDialogue() {
+	        var enableAI = document.getElementById("enableAI").checked;
+	        var gameMode;
+	        if(document.getElementById("ownerRadio").checked = true) {
+	          gameMode = "owner";
+	        }
+	        if(document.getElementById("sequentialRadio").checked = true) {
+	          gameMode = "sequential";
+	        }
+	        if(document.getElementById("randomRadio").checked = true) {
+	          gameMode = "random";
+	        }
 	      }
 
 					// pageAddUser: adds a user to the game and to user list
