@@ -22,7 +22,7 @@
 							<p id="question">	Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
 					</div>
-					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 rounded ">
+					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 col-sm-auto rounded ">
 
 					</div>
 					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
@@ -386,7 +386,7 @@
 					var node = document.createTextNode("New Question");
 					button.setAttribute("type", "button");
 					button.setAttribute("style", "font-size : 15px; background-color: #FFB9B9");
-					button.setAttribute("class", "p-2 pr-2 mb-1 btn text-white");
+					button.setAttribute("class", "p-2 pr-2 mb-1 btn-block btn text-white");
 					button.setAttribute("data-toggle", "modal");
 					button.setAttribute("data-target", "#firstModal");
 					container.appendChild(button);
@@ -403,7 +403,7 @@
 				var node = document.createTextNode("End Game");
 				button.setAttribute("type", "button");
 				button.setAttribute("style", "width:17vh; background-color:  #FFB9B9");
-				button.setAttribute("class", "mb-1 p-1 btn text-white");
+				button.setAttribute("class", "mb-1 p-1 btn btn-block text-white");
 				container.appendChild(button);
 				button.appendChild(node);
 			}
