@@ -80,6 +80,7 @@
 			<h3>Users</h3>
 			</div>
 			<div id="userTable2" class=" rounded-bottom  pre-scrollable text-truncate text-center" style="overflow-y: scroll; max-height: 475px ;background-color: #E4E4E4">
+
 			</div>
 		</div>
 		<div class="modal fade" id="firstModal">
@@ -352,7 +353,7 @@
 	        var text2 = document.createTextNode(name);
 	        userText2.appendChild(text2);
 	        document.getElementById("userTable2").appendChild(userText2);
-	        userText2.setAttribute("class","  m-2 font-weight-light ");
+	        userText2.setAttribute("class","m-2 font-weight-light");
 				}
 
 					// pageRemoveUser: takes user out of game and of user list
@@ -366,6 +367,10 @@
         			while (userList.hasChildNodes()) {
         				userList.removeChild(userList.firstChild);
         			}
+							var userList2 = document.getElementById("userTable2");
+							while (userList2.hasChildNodes()) {
+								userList2.removeChild(userList2.firstChild);
+							}
       			}
 
 					// pageSubmitQuestion: makes the input text into the new question value
