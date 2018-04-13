@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 
 app.use('/',express.static(__dirname + '/public')); // serves static files in /html
 
@@ -19,7 +19,7 @@ var games = new Map();
 io.on('connection', function(socket){
 	// return true if game exists, false otherwise
 	socket.on('gameExists', function(name,callback){
-		console.log('INITTTTTTTTTTTT');
+		console.log('GAMEEXISTS');
 		callback(gameExists(name));
 	});
 
@@ -48,21 +48,22 @@ io.on('connection', function(socket){
 	});
 
 	// request to create a game
-	socket.on('createGame', function(questionerMode, name, callback){
-			createGame("owner",socket,name, function(){
+	socket.on('createGame', function(name, questionerMode, aiEnabled, callback){
+			createGame(name, questionerMode, aiEnabled, socket, function(){
 				callback();
 			});
 		}); 
 
 
 	// creates room if not already created
-	function createGame(questionerMode,socket,name,callback){
+	function createGame(name, questionerMode, aiEnabled, socket, callback){
 		console.log('createGame');
 		if(!games.get(getRoom(socket))){
 			console.log("ACTUALLYCREATINGGAMEHERE");
 			var game = {};
 			//game.room = getRoom(socket);
 			game.room = name;
+			game.aiEnabled = aiEnabled;
 			game.owner = socket;
 			game.questioner = socket;
 			game.questioner.emit('isQuestioner',true); // notify new questioner
@@ -105,14 +106,25 @@ io.on('connection', function(socket){
 	//	}
 	});
 
+	var angerThreshold = 0.6;
 	// request from the a user to submit an answer
 	socket.on('submitAnswer', function(answer){
 		console.log('ANSWER GOT');
 		var game = getGame(socket);
 		var player = getPlayerBySocket(socket);
 		var answer = {text:answer, name: player.name};
-		game.answers.push(answer);
-		roomPing(game);
+		if(game.aiEnabled){
+			getAnger(answer.text,function(anger){
+				console.log(anger);
+				if(anger<angerThreshold){
+					game.answers.push(answer);
+					roomPing(game);					
+				}
+			});
+		}else{
+			game.answers.push(answer);
+			roomPing(game);
+		}
 		console.log('ANSWER SENT');
 	});
 
