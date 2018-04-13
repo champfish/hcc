@@ -13,14 +13,19 @@
 			<div class="col-12 d-flex" >
 			</div>
 			<div class="row">
-				<div id="body" class=" mt-3 ml-1 row col-lg-9 container-fluid">
+				<div id="body" class="mt-3 ml-1 pr-5 row col-lg-9 container-fluid">
 					<div class="d-none d-md-block d-md-block col-md-2 flex-wrap" id="question-image" >
-						<img src="res/crowlogo.png" class=" ml-4 rounded" width="95vh" style=" max-width: 100%">
+						<img src="res/crowlogo.png" class=" ml-4 rounded " width="95vh" style=" max-width: 95vh">
 					</div>
-					<div	class="p-1 col-md-9 rounded " style="overflow: hidden">
-						<div id="questionContainer" class="col-md-12 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
+					<div	class="p-1 col-lg-9 col-md-8 rounded " style="overflow: hidden">
+						<div id="questionContainer" class="col-lg-12 col-md-12 rounded" style="overflow: auto; height:13vh; background-color: #E4E4E4">
 							<p id="question">	Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis Sed ut perspiciatis unde omnis	Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto. </p>
 						</div>
+					</div>
+					<div	class="p-2 col-lg-1 col-md-1 rounded ">
+						<button type="button" style="width:17vh;font-size : 15px; background-color: #FFB9B9" class="p-2 pr-2 mb-1 btn text-white">new question</button>
+						<button type="button" style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >end game</button>
+
 					</div>
 					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style=" overflow-y: scroll; height: 65vh">
 						<div id="answerSection" class="d-flex text-secondary mb-1 align-content-stretch flex-wrap bd-highlight " style="" >
@@ -59,7 +64,6 @@
 	           <div class="modal-content">
 	             <div class="modal-header">
 	               <h4 class="modal-title">Join Game</h4>
-	               <button type="button" class="close" data-dismiss="modal"> </button>
 	             </div>
 	             <div class="modal-body">
 	               <div class="form-group">
@@ -96,6 +100,52 @@
 				 </div>
 			 </div>
 		 </div>
+		 <div class="modal fade" id="gameSettingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			 <div class="modal-dialog" role="document">
+				 <div class="modal-content">
+					 <div class="modal-header">
+						 <h5 class="modal-title" id="exampleModalLabel">Game Settings</h5>
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">&times;</span>
+						 </button>
+					 </div>
+					 <div class="modal-body">
+						 Game modes:
+					 <div class="form-check">
+					 	<input class="form-check-input" type="radio" name="gameModes" id="ownerRadio" value="option1" checked>
+ 						<label class="form-check-label" for="ownerRadio">
+ 							Owner
+ 						</label>
+ 					</div>
+ 					<div class="form-check">
+ 						<input class="form-check-input" type="radio" name="gameModes" id="randomRadio" value="option2">
+ 						<label class="form-check-label" for="randomRadio">
+ 							Random
+ 						</label>
+ 					</div>
+ 					<div class="form-check">
+ 						<input class="form-check-input" type="radio" name="gameModes" id="sequentialRadio" value="option2">
+ 						<label class="form-check-label" for="sequentialRadio">
+ 							Sequential
+ 						</label>
+					 </div>
+					 <p></p>
+					 <div class="form-check">
+					 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+						 <label class="form-check-label" for="defaultCheck1">
+							 Enable Deep Learning AI Filtering
+						 </label>
+					 </div>
+				 	 </div>
+					 <div class="modal-footer">
+						 <button type="button" data-dismiss="modal" class="btn text-white" style="background-color: #FFB9B9" >Create Game</button>
+					 </div>
+				 </div>
+			 </div>
+		 </div>
+		 <button hidden type="button" id="gameSettingsButton" class="btn btn-primary" data-toggle="modal" data-target="#gameSettingsModal"></button>
+
+
 
 		<!-- External JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -274,6 +324,24 @@
 					var user = document.getElementById("usr").value;
 					joinGame(user);
 				}
+					// pageGameSettingsModal: calls modal for game creator to choose game settings
+				function pageGameSettingsModal() {
+	        document.getElementById("gameSettingsButton").click(); // Click on the checkbox
+	      }
+					//pageCreateGameDialogue: holds game values from the settings
+				function pageCreateGameDialogue() {
+	        var enableAI = document.getElementById("enableAI").checked;
+	        var gameMode;
+	        if(document.getElementById("ownerRadio").checked = true) {
+	          gameMode = "owner";
+	        }
+	        if(document.getElementById("sequentialRadio").checked = true) {
+	          gameMode = "sequential";
+	        }
+	        if(document.getElementById("randomRadio").checked = true) {
+	          gameMode = "random";
+	        }
+	      }
 
 					// pageAddUser: adds a user to the game and to user list
 				function pageAddUser(name) {
@@ -380,8 +448,8 @@
 					var para = document.createElement("p");
 					var answerText = document.createTextNode(answer);
 					var userText = document.createTextNode(user);
-					newDiv.setAttribute("class", "p-2 col m-1 rounded border");
-					newDiv.setAttribute("style", "background-color: #E4E4E4;min-width:220px");
+					newDiv.setAttribute("class", " p-2 col m-1 rounded border");
+					newDiv.setAttribute("style", "max-height: 280px; background-color: #E4E4E4;min-width:220px; overflow-y:scroll");
 					newDiv.setAttribute("data-toggle", "modal");
 	        newDiv.setAttribute("data-target", "#answerModal");
 					newDiv.setAttribute("user", user);
