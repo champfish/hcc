@@ -130,14 +130,14 @@
 					 </div>
 					 <p></p>
 					 <div class="form-check">
-					 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+					 <input class="form-check-input" type="checkbox" value="" id="enableAI">
 						 <label class="form-check-label" for="defaultCheck1">
 							 Enable Deep Learning AI Filtering
 						 </label>
 					 </div>
 				 	 </div>
 					 <div class="modal-footer">
-						 <button type="button" data-dismiss="modal" class="btn text-white" style="background-color: #FFB9B9" >Create Game</button>
+						 <button type="button" data-dismiss="modal" class="btn text-white" style="background-color: #FFB9B9" onclick="pageCreateGame()">Create Game</button>
 					 </div>
 				 </div>
 			 </div>
@@ -165,10 +165,7 @@
 							joinRoom();
 						}else{
 							console.log('creatGame');
-							// prompt game options
-							createGame('owner', function(){
-								joinRoom();
-							});
+							pageCreateGameDialogue();
 						}
 					});
 				}
@@ -282,9 +279,9 @@
 
 				// requests to create a game
 				// questionerMode - the mode of how the questioner changes owner/random/sequential
-				function createGame(questionerMode, callback){
-					socket.emit('createGame', questionerMode, getURL(), function(){
-						callback();
+				function createGame(questionerMode, aiEnabled){
+					socket.emit('createGame', getURL(), questionerMode, aiEnabled, function(){
+						joinRoom();
 					});
 				}
 
@@ -323,23 +320,25 @@
 					var user = document.getElementById("usr").value;
 					joinGame(user);
 				}
-					// pageGameSettingsModal: calls modal for game creator to choose game settings
-				function pageGameSettingsModal() {
+					// pageCreateGameDialogue: calls modal for game creator to choose game settings
+				function pageCreateGameDialogue() {
 	        document.getElementById("gameSettingsButton").click(); // Click on the checkbox
 	      }
-					//pageCreateGameDialogue: holds game values from the settings
-				function pageCreateGameDialogue() {
-	        var enableAI = document.getElementById("enableAI").checked;
-	        var gameMode;
-	        if(document.getElementById("ownerRadio").checked = true) {
-	          gameMode = "owner";
-	        }
-	        if(document.getElementById("sequentialRadio").checked = true) {
-	          gameMode = "sequential";
-	        }
-	        if(document.getElementById("randomRadio").checked = true) {
-	          gameMode = "random";
-	        }
+					//pageCreateGame: page calls to create game
+				function pageCreateGame() {
+			        var enableAI = document.getElementById("enableAI").checked;
+			        alert(enableAI);
+			        var gameMode;
+			        if(document.getElementById("ownerRadio").checked = true) {
+			          gameMode = "owner";
+			        }
+			        if(document.getElementById("sequentialRadio").checked = true) {
+			          gameMode = "sequential";
+			        }
+			        if(document.getElementById("randomRadio").checked = true) {
+			          gameMode = "random";
+			        }
+			    createGame(gameMode, enableAI);
 	      }
 
 					// pageAddUser: adds a user to the game and to user list
@@ -359,7 +358,7 @@
 
 					// pageRemoveUser: takes user out of game and of user list
 				function pageRemoveUser(name) {
-					document.getElementById("LMAO SORRY CJ").remove();
+					document.getElementById(name).remove();
 				}
 
 					// pageRemoveAllUsers: clears all users
@@ -450,9 +449,9 @@
 					newDiv.setAttribute("class", " p-2 col m-1 rounded border");
 					newDiv.setAttribute("style", "max-height: 280px; background-color: #E4E4E4;min-width:220px; overflow-y:scroll");
 					newDiv.setAttribute("data-toggle", "modal");
-	        newDiv.setAttribute("data-target", "#answerModal");
+	      			newDiv.setAttribute("data-target", "#answerModal");
 					newDiv.setAttribute("user", user);
-	        newDiv.setAttribute("answer", answer);
+	        		newDiv.setAttribute("answer", answer);
 					newDiv.setAttribute("id", answerId);
 					newDiv.setAttribute("onclick", "pageAnswerPopup("+ answerId + ")");
 					para.setAttribute("class", "p-2");
