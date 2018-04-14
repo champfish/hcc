@@ -63,7 +63,7 @@ label{
     <center><div id="container">
         <div id="left"><h3>Name:</h3></div>
         <div id="middle"><input type="text" class="form-control" id="usr"></div>
-        <div id="right" ><button type="button" class="btn btn-primary" style="background-color:  #FFB9B9";"onclick="createGame()">Make Game</button></div>
+        <div id="right" ><button type="button" class="btn btn-primary" style="background-color: #FFB9B9;" onclick="createGame()">Make Game</button></div>
     </div></center>
 </div>
 
@@ -72,10 +72,13 @@ label{
 </body>
 
 <script>
-function createGame()
-{
-  document.getElementById("CreatingGameText").innerHTML = "Creating Game: \"" + document.getElementById("usr").value + "\"";
-  document.getElementById("CreatingGameText").style.display="block";
-  setTimeout(function(){window.location = "https://tinamouhcc.herokuapp.com/" + document.getElementById("usr").value;}, 1000);
+function createGame() {
+  var name = document.getElementById("usr").value;
+  if(name.length>0){
+    document.getElementById("CreatingGameText").innerHTML = "Creating Game: \"" + document.getElementById("usr").value + "\"";
+    document.getElementById("CreatingGameText").style.display="block";
+    setTimeout(function(){window.location = "https://tinamouhcc.herokuapp.com/" + name;}, 500);
+  }
 }
 </script>
+l
