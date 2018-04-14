@@ -1,31 +1,5 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 <html lang = "en">
-
-<style>
-
-p{
-  padding-bottom: 50px;
-  color: black;
-  margin: auto;
-  width: 60%;
-  word-wrap: break-word;
-  text-align: center;
-}
-
-label{
-  padding-top: 50px;
-  padding-bottom: 2px;
-  max-height: 50px;
-}
-
-#container {height: 100%; width:100%; font-size: 0;}
-#left, #middle, #right {display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px;}
-#left {width: 10%;}
-#middle {width: 20%;}
-#right {width: 10%;}
-
-</style>
 
 <head>
   <meta charset="UTF-8">
@@ -35,6 +9,32 @@ label{
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Home</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <style>
+
+  p{
+    padding-bottom: 50px;
+    color: black;
+    margin: auto;
+    width: 60%;
+    word-wrap: break-word;
+    text-align: center;
+  }
+
+  label{
+    padding-top: 50px;
+    padding-bottom: 2px;
+    max-height: 50px;
+  }
+
+  #container {height: 100%; width:100%; font-size: 0;}
+  #left, #middle, #right {display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px;}
+  #left {width: 10%;}
+  #middle {width: 20%;}
+  #right {width: 10%;}
+
+  </style>
 
 
 </head>
@@ -63,7 +63,7 @@ label{
     <center><div id="container">
         <div id="left"><h3>Name:</h3></div>
         <div id="middle"><input type="text" class="form-control" id="usr"></div>
-        <div id="right" ><button type="button" class="btn btn-primary" style="background-color:  #FFB9B9";"onclick="createGame()">Make Game</button></div>
+        <div id="right" ><button type="button" class="btn btn-primary" style="background-color: #FFB9B9;" onclick="createGame()">Make Game</button></div>
     </div></center>
 </div>
 
@@ -72,10 +72,13 @@ label{
 </body>
 
 <script>
-function createGame()
-{
-  document.getElementById("CreatingGameText").innerHTML = "Creating Game: \"" + document.getElementById("usr").value + "\"";
-  document.getElementById("CreatingGameText").style.display="block";
-  setTimeout(function(){window.location = "https://tinamouhcc.herokuapp.com/" + document.getElementById("usr").value;}, 1000);
+function createGame() {
+  var name = document.getElementById("usr").value;
+  if(name.length>0){
+    document.getElementById("CreatingGameText").innerHTML = "Creating Game: \"" + document.getElementById("usr").value + "\"";
+    document.getElementById("CreatingGameText").style.display="block";
+    setTimeout(function(){window.location = "https://tinamouhcc.herokuapp.com/" + name;}, 500);
+  }
 }
 </script>
+l
