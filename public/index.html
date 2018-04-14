@@ -28,11 +28,8 @@
     max-height: 50px;
   }
 
-  #container {height: 100%; width:100%; font-size: 0;}
   #left, #middle, #right {display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px;}
-  #left {width: 10%;}
-  #middle {width: 20%;}
-  #right {width: 10%;}
+
 
   </style>
 
@@ -42,14 +39,14 @@
 <body>
   <div class="description">
 
-    <center><img src="http://i.xomf.com/nbqmh.png" class="img-fluid" alt="Responsive image" height="500" width="500"></center>
+    <center><img src="http://i.xomf.com/nbqmh.png" class="img-fluid" alt="Responsive image" height="300" width="300"></center>
 
     <p>
+      <br>
       Tinamou is an online learning tool in which students join a discussion room where they answer questions posed by teachers or fellow students.
       Tinamou is designed to promote critical discussion between classmates,
       and allows students to participate in socratic style discussion,
       encouraging them to be engaged with the lesson and be aware of the multitude of differing views of their classmates.
-
 
     </p>
   </div>
@@ -59,7 +56,7 @@
     <center><div id="container">
         <div id="left"><h3>Name:</h3></div>
         <div id="middle"><input type="text" class="form-control" id="usr"></div>
-        <div id="right" ><button type="button" class="btn btn-primary" style="background-color: #FFB9B9;" onclick="createGame()">Make Game</button></div>
+        <div id="right" ><button type="button" class="btn text-white" style="background-color: #FFB9B9;" onclick="createGame()">Make Game</button></div>
     </div></center>
 </div>
 
@@ -77,4 +74,3 @@ function createGame() {
   }
 }
 </script>
-l
