@@ -288,6 +288,8 @@
 				function createGame(questionerMode, aiEnabled){
 					socket.emit('createGame', getURL(), questionerMode, aiEnabled, function(){
 						joinRoom();
+						var joinButton = document.getElementById("joinGame");
+						joinButton.click();
 					});
 				}
 

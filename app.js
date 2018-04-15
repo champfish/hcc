@@ -339,6 +339,5 @@ function getAnger(text, callback){
 			}
 		}
 		callback(anger);
-		//console.log(JSON.stringify(callback, null, 2));
 	});
 }
