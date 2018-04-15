@@ -269,13 +269,23 @@
 					socket.emit('askQuestion',question);
 				}
 
-				// server notifying the next questioner?
+				// server notifying if is questioner
 				socket.on('isQuestioner',function(is){
 					//alert(is);
 					if(is){
 						pageShowNewQuestionButton();
 					}else{
 						pageHideNewQuestionButton();
+					}
+				});
+
+				// server notifying if is owner
+				socket.on('isOwner',function(is){
+					if(is){
+						//pageShowEndGameButton();
+					}
+					else {
+						pageHideEndGameButton();
 					}
 				});
 

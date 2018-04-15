@@ -27,11 +27,13 @@ io.on('connection', function(socket){
 			deleteGame(socket);
 			return;
 		}
-		else if(auth(socket,g.owner)){
-			g.owner = g.players[0];
+		if(auth(socket,g.owner)){
+			g.owner = g.players[0].socket;
+			g.owner.emit('isOwner',true);
 		}
-		else if(auth(socket,g.questioner)){
-			g.questioner=g.players[0];
+		if(auth(socket,g.questioner)){
+			g.questioner=g.players[0].socket;
+			g.questioner.emit('isQuestioner',true);
 		}
 		roomPing(g);
 	});
@@ -208,8 +210,6 @@ io.on('connection', function(socket){
 		var roomSockets = io.sockets.in(room);
 		roomSockets.emit('roomPing',getPublicGame(game));
 	}
-
-
 });
 
 // starts the webserver listen
@@ -277,6 +277,8 @@ function removePlayerBySocket(socket){
 	}
 }
 
+
+// returns the public information object of the games
 function getPublicGame(game){
 		var publicGame = {};
 		publicGame.players = [];
@@ -290,7 +292,6 @@ function getPublicGame(game){
 		publicGame.ongoing = game.ongoing;
 		publicGame.answers = game.answers;
 		publicGame.question = game.question;
-		// console.log(publicGame);
 		return publicGame;
 }
 
