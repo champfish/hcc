@@ -23,6 +23,8 @@
 						</div>
 					</div>
 					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 col-sm-auto rounded ">
+							<button id="questionButton" type="button" style="font-size : 15px; background-color: #FFB9B9" class="p-2 pr-2 mb-1 btn text-white" data-toggle="modal" data-target="#firstModal">New Question</button>
+							<button id="endGameButton"  type="button" style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >End Game</button>
 
 					</div>
 					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style="overflow-y: scroll; height: 65vh">
@@ -378,34 +380,27 @@
 							askQuestion(document.getElementById("newQuestion").value);
 						}
 
-					// pageNewQuestionButton: Gives the option as a button for a modal asking for a new question
-				function pageNewQuestionButton(){
-					var container = document.getElementById("sideButtons");
-					var button = document.createElement("button");
-					var node = document.createTextNode("New Question");
-					button.setAttribute("type", "button");
-					button.setAttribute("style", "font-size : 15px; background-color: #FFB9B9");
-					button.setAttribute("class", "p-2 pr-2 mb-1 btn text-white");
-					button.setAttribute("data-toggle", "modal");
-					button.setAttribute("data-target", "#firstModal");
-					container.appendChild(button);
-					button.appendChild(node);
+					// pageShowQuestionButton: Gives the option as a button for a modal asking for a new question
+				function pageShowNewQuestionButton(){
+					document.getElementById("questionButton").style.visibility = "visible";
 				}
 
-				// pageNewQuestionButton: Gives the option as a button for a modal asking for a new question
-			function pageEndGameButton(){
-				if(true){
-					//djkhskhjadsfhjkdfs
+				// pageHideNewQuestionButton: Hides question button
+				function pageHideNewQuestionButton(){
+					document.getElementById("questionButton").style.visibility = "hidden";
 				}
-				var container = document.getElementById("sideButtons");
-				var button = document.createElement("button");
-				var node = document.createTextNode("End Game");
-				button.setAttribute("type", "button");
-				button.setAttribute("style", "width:17vh; background-color:  #FFB9B9");
-				button.setAttribute("class", "mb-1 p-1 btn text-white");
-				container.appendChild(button);
-				button.appendChild(node);
-			}
+
+					// pageShowEndGameButton: shows end game button
+				function pageShowEndGameButton(){
+					document.getElementById("endGameButton").style.visibility = "visible";
+
+				}
+
+					// pageHideEndGameButton: hides the end game button
+				function pageHideEndGameButton(){
+					document.getElementById("endGameButton").style.visibility = "hidden";
+
+				}
 
 					//  pageNewQuestion: changes the question text
 				function pageNewQuestion(question) {
