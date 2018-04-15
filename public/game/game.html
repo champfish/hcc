@@ -46,11 +46,11 @@
 						 </div>
 					 </div>
 				</div>
-				<div id="tableSection" class="d-none d-lg-block col-sm-12 col-lg-3 rounded" style=" ">
+				<div id="tableSection" class="d-none d-lg-block col-sm-12 col-lg-3 rounded">
 					<div class="mt-3  rounded-top text-truncate text-center ml-4" style="background-color: #E4E4E4">
 						<h3>Users</h3>
 					</div>
-					<div id="userTable" class=" rounded-bottom  pre-scrollable text-truncate text-center ml-4 " style="overflow-y: scroll; max-height: 475px ;background-color: #E4E4E4">
+					<div id="userTable" class=" rounded-bottom text-truncate text-center ml-4" style="max-height: 475px ;background-color: #E4E4E4">
 					</div>
 				</div>
 			</div>
@@ -79,7 +79,7 @@
 			<div class="mt-3 rounded-top text-truncate text-center " style="background-color: #E4E4E4">
 			<h3>Users</h3>
 			</div>
-			<div id="userTable2" class=" rounded-bottom  pre-scrollable text-truncate text-center" style="overflow-y: scroll; max-height: 475px ;background-color: #E4E4E4">
+			<div id="userTable2" class="rounded-bottom text-truncate text-center" style="max-height: 475px ;background-color: #E4E4E4">
 
 			</div>
 		</div>
@@ -327,7 +327,6 @@
 					//pageCreateGame: page calls to create game
 				function pageCreateGame() {
 			        var enableAI = document.getElementById("enableAI").checked;
-			        alert(enableAI);
 			        var gameMode;
 			        if(document.getElementById("ownerRadio").checked = true) {
 			          gameMode = "owner";
