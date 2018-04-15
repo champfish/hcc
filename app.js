@@ -4,8 +4,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 80;
 
+// returns any public file
 app.use('/',express.static(__dirname + '/public')); // serves static files in /html
 
+// returns the game file
 app.get(/^(?!\/.+\/).*/, function(req, res){
 	var url = req.originalUrl.substring(1);
 	res.sendFile(__dirname + '/public/game/game.html');
@@ -17,6 +19,13 @@ var games = new Map();
 
 // connection 
 io.on('connection', function(socket){
+	// removes the socket from the game
+	socket.on('disconnecting', function(){
+		getPlayerBySocket(socket);
+		removePlayerBySocket(socket);
+		roomPing(getGame(socket));
+	});
+
 	// return true if game exists, false otherwise
 	socket.on('gameExists', function(name,callback){
 		console.log('GAMEEXISTS');
@@ -38,11 +47,8 @@ io.on('connection', function(socket){
 	socket.on('joinRoom', function(name, callback){
 		console.log('Joining Room: '+name);		
 		joinRoom(socket,name, function(){
-			//createGame("owner",socket,name,function(){
 			var game = getGame(socket);
-				// console.log(getPublicGame(game));
 			callback(getPublicGame(game));
-			//});
 		});
 
 	});
@@ -97,13 +103,6 @@ io.on('connection', function(socket){
 		console.log('react');
 	var p = getPlayerBySocket(player.socket);
 	p.push(action);
-	//	var game = getGame(socket);
-	//	var players = game.players;
-	//	for(i = 0; i<players.length; i++ ){
-	//		if(auth(player.socket,players[i].socket)){
-	//			players[i].reacts.push(action);
-	//		}
-	//	}
 	});
 
 	var angerThreshold = 0.6;
@@ -199,7 +198,7 @@ http.listen(port, function(){
 // returns true if the two sockets are the same, else false
 function auth(socketA, socketB){
 	console.log('auth');
-	return(socketA == socketB);
+	return(socketA.id == socketB.id);
 }
 
 // returns the room the socket is in
@@ -210,7 +209,6 @@ function getRoom(socket){
 
 // get the game the socket is in
 function getGame(socket){
-	//console.log(games);
 	var game =  games.get(getRoom(socket));
 	return game;
 }
@@ -228,18 +226,30 @@ function joinRoom(socket,name,callback){
 
 // returns the player object of the socket
 function getPlayerBySocket(socket){
-	console.log('getPlayerBySocket');
 	var game = getGame(socket);
+	if(game==null){
+		console.log('Error in getting player');
+	}else{
 	var players = game.players;
-	console.log(players[0].name);
-	//return players[0];
-	for(i = 0; i<players.length; i++ ){
-		if(auth(socket,players[i].socket)){
-			return players[i];
+		for(i = 0; i<players.length; i++ ){
+			if(auth(socket,players[i].socket)){
+				return players[i];
+			}
 		}
 	}
 }
 
+// removes the player object of the socket from the list
+function removePlayerBySocket(socket){
+	var game = getGame(socket);
+	var players = game.players;
+	for(i = 0; i<players.length; i++ ){
+		if(auth(socket,players[i].socket)){
+			players.splice(i,1);
+			return;
+		}
+	}
+}
 
 function getPublicGame(game){
 	console.log('getPublicGame');
