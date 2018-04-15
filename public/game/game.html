@@ -334,13 +334,13 @@
 				function pageCreateGame() {
 			        var enableAI = document.getElementById("enableAI").checked;
 			        var gameMode;
-			        if(document.getElementById("ownerRadio").checked = true) {
+			        if(document.getElementById("ownerRadio").checked == true) {
 			          gameMode = "owner";
 			        }
-			        if(document.getElementById("sequentialRadio").checked = true) {
+			        if(document.getElementById("sequentialRadio").checked == true) {
 			          gameMode = "sequential";
 			        }
-			        if(document.getElementById("randomRadio").checked = true) {
+			        if(document.getElementById("randomRadio").checked == true) {
 			          gameMode = "random";
 			        }
 			    createGame(gameMode, enableAI);
