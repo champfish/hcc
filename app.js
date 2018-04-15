@@ -21,9 +21,11 @@ var games = new Map();
 io.on('connection', function(socket){
 	// removes the socket from the game
 	socket.on('disconnecting', function(){
+		var g = getGame(socket);
+		if(auth())
 		getPlayerBySocket(socket);
 		removePlayerBySocket(socket);
-		roomPing(getGame(socket));
+		roomPing(g);
 	});
 
 	// return true if game exists, false otherwise
