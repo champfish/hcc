@@ -198,7 +198,7 @@ http.listen(port, function(){
 // returns true if the two sockets are the same, else false
 function auth(socketA, socketB){
 	console.log('auth');
-	return(socketA.id == socketB.id);
+	return(socketA == socketB);
 }
 
 // returns the room the socket is in
