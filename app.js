@@ -19,12 +19,20 @@ var games = new Map();
 
 // connection 
 io.on('connection', function(socket){
-	// removes the socket from the game
+	// removes the socket from the game, passing on roles and deleteing game as needed.
 	socket.on('disconnecting', function(){
 		var g = getGame(socket);
-		if(auth())
-		getPlayerBySocket(socket);
 		removePlayerBySocket(socket);
+		if(g.players.length==0){
+			deleteGame(socket);
+			return;
+		}
+		else if(auth(socket,g.owner)){
+			g.owner = g.players[0];
+		}
+		else if(auth(socket,g.questioner)){
+			g.questioner=g.players[0];
+		}
 		roomPing(g);
 	});
 
@@ -136,6 +144,7 @@ io.on('connection', function(socket){
 		if(auth(game.questioner,socket)){
 			game.question = question;
 			game.answers=[];
+			changeQuestioner(socket);
 			roomPing(game);
 		}
 	});
@@ -145,7 +154,15 @@ io.on('connection', function(socket){
 		console.log('nextQuestion');
 		var game = getGame(socket);
 		if(auth(game.owner,socket)){
-			game.questioner.emit('isQuestioner',true); // notify new questioner
+			changeQuestioner(socket);
+		}
+		game.questioner.emit('isQuestioner',true); // notify new questioner
+		roomPing(game);
+	});
+	
+	// changes the questioner based on the mode
+	function changeQuestioner(socket){
+		var game = getGame(socket);
 			switch(questionerMode){
 				case "owner":
 					game.questioner = game.owner;
@@ -158,12 +175,9 @@ io.on('connection', function(socket){
 					var players = game.players;
 					game.questioner = players[game.roundIndex%players.length].socket;
 				break;
-
-			}
 		}
-		game.questioner.emit('isQuestioner',true); // notify new questioner
-		roomPing(game);
-	});
+		roomPing();
+	}
 
 	// request to end the game
 	socket.on('endGame', function(){
@@ -215,9 +229,13 @@ function getGame(socket){
 	return game;
 }
 
+// deltes the game the socket is in
+function deleteGame(socket){
+	games.delete(getRoom(socket));
+}
+
 // leaves any previous room and the room name selected
 function joinRoom(socket,name,callback){
-	console.log('joinRoom');
 	console.log('joining room: '+ name);
 	socket.leave(getRoom(socket));
 	socket.join(name, function(){

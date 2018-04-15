@@ -349,10 +349,10 @@
 					userText.setAttribute("class","m-2 font-weight-light ");
 					userText.setAttribute("style","background-color: #E4E4E4;");
 					var userText2 = document.createElement("p");
-	        var text2 = document.createTextNode(name);
-	        userText2.appendChild(text2);
-	        document.getElementById("userTable2").appendChild(userText2);
-	        userText2.setAttribute("class","m-2 font-weight-light");
+			        var text2 = document.createTextNode(name);
+			        userText2.appendChild(text2);
+			        document.getElementById("userTable2").appendChild(userText2);
+			        userText2.setAttribute("class","m-2 font-weight-light");
 				}
 
 					// pageRemoveUser: takes user out of game and of user list
@@ -445,7 +445,7 @@
 				});
 	      }
 
-					// pageRemoveAllAnswers: Clears all answers
+				// pageRemoveAllAnswers: Clears all answers
 				function pageRemoveAllAnswers() {
         			var section = document.getElementById("answerSection");
         			while (section.hasChildNodes()) {
@@ -453,10 +453,10 @@
         			}
      			}
 
-					// pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
-					var answerId = 0; // id for each answer
+					0/ pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
+				var answerId = 0; // id for each answer
 				function pageAddAnswer(user, answer) {
-		      answerId+=1;
+		      		answerId+=1;
 					var container = document.getElementById("answerContainer");
 					var section = document.getElementById("answerSection");
 					var newUser = document.createElement("h3");
