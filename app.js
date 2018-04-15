@@ -156,27 +156,33 @@ io.on('connection', function(socket){
 		if(auth(game.owner,socket)){
 			changeQuestioner(socket);
 		}
-		game.questioner.emit('isQuestioner',true); // notify new questioner
 		roomPing(game);
 	});
 	
 	// changes the questioner based on the mode
 	function changeQuestioner(socket){
 		var game = getGame(socket);
-			switch(questionerMode){
+		game.roundIndex++;
+		game.questioner.emit('isQuestioner',false); // notify old questioner
+			switch(game.questionerMode){
+				default:
 				case "owner":
+				console.log('owner');
 					game.questioner = game.owner;
 				break;
 				case "random":
+					console.log('random');
 					var players = game.players;
 					game.questioner = players[Math.floor(Math.random()*players.length)].socket;
 				break;
 				case "sequential":
 					var players = game.players;
+						console.log('sequential');
 					game.questioner = players[game.roundIndex%players.length].socket;
 				break;
 		}
-		roomPing();
+		game.questioner.emit('isQuestioner',true); // notify new questioner
+		roomPing(game);
 	}
 
 	// request to end the game
@@ -272,7 +278,6 @@ function removePlayerBySocket(socket){
 }
 
 function getPublicGame(game){
-	console.log('getPublicGame');
 		var publicGame = {};
 		publicGame.players = [];
 		for(var i =0;i<game.players.length;i++){
