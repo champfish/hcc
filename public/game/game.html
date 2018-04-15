@@ -23,11 +23,11 @@
 						</div>
 					</div>
 					<div id="sideButtons" class="p-2 col-lg-1 col-md-1 col-sm-auto rounded ">
-							<button id="questionButton" type="button" style="font-size : 15px; background-color: #FFB9B9" class="p-2 pr-2 mb-1 btn text-white" data-toggle="modal" data-target="#firstModal">New Question</button>
-							<button id="endGameButton"  type="button" style="width:17vh; background-color:  #FFB9B9" class="mb-1 p-1 btn text-white" >End Game</button>
+							<button id="questionButton" type="button" style="font-size : 15px; background-color: #FFB9B9;visibility: hidden" class="p-2 pr-2 mb-1 btn text-white" data-toggle="modal" data-target="#firstModal">New Question</button>
+							<button id="endGameButton"  type="button" style="width:17vh; background-color:  #FFB9B9; visibility: hidden" class="mb-1 p-1 btn text-white" >End Game</button>
 
 					</div>
-					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style="overflow-y: scroll; height: 65vh">
+					<container id="answerContainer" class="inner bd-example p-1 col-xs-auto container-fluid rounded" style="overflow-y: scroll; height: 65vh;">
 						<div id="answerSection" class="d-flex text-secondary mb-1 align-content-stretch flex-wrap bd-highlight">
 						</div>
 					</container>
@@ -269,9 +269,13 @@
 					socket.emit('askQuestion',question);
 				}
 
+				// server notifying the next questioner?
 				socket.on('isQuestioner',function(is){
+					//alert(is);
 					if(is){
-						pageNewQuestionButton();
+						pageShowNewQuestionButton();
+					}else{
+						pageHideNewQuestionButton();
 					}
 				});
 
@@ -448,7 +452,7 @@
         			}
      			}
 
-					0/ pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
+					// pageAddAnswer: creates a new div element containing a username and their answer in a scrollable
 				var answerId = 0; // id for each answer
 				function pageAddAnswer(user, answer) {
 		      		answerId+=1;
