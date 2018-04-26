@@ -41,7 +41,7 @@
 									<div class="form-group">
 									</div>
 								 </div>
-								 <div class="modal-footer">
+								 <div is="answerModalFooter" class="modal-footer">
 									 <button type="button" style="background-color: #FFB9B9" class="btn text-white" data-dismiss="modal">close</button>
 								 </div>
 							 </div>
@@ -498,6 +498,8 @@
 	        var nameHeader = document.getElementById("answerUserModal");
 	        var nameSection = document.createElement("h4");
 	        var bodySection = document.getElementById("answerModalBody");
+					var footerSection = document.getElementById("answerModalFooter");
+
 					while (nameHeader.hasChildNodes()) {
 						nameHeader.removeChild(nameHeader.firstChild);
 					}
@@ -514,6 +516,14 @@
 	        bodySection.appendChild(answerTextBox);
 	        nameHeader.appendChild(nameSection);
 	        nameSection.appendChild(nameText);
+
+					var textBox = document.createElement("textarea");
+					textBox.setAttribute("class", "form-control col-sm-11 col-md-11");
+				 	textBox.setAttribute("rows", "3");
+				 	textBox.setAttribute("id","AnswerBox");
+				 	textBox.setAttribute("placeholder", "Your Reply");
+				 	footerSection.appendChild(textBox);
+
 	      }
 		init();
 		</script>
