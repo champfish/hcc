@@ -505,7 +505,9 @@
 	        var nameSection = document.createElement("h4");
 	        var bodySection = document.getElementById("answerModalBody");
 					var footerSection = document.getElementById("answerModalFooter");
-
+					while (footerSection.hasChildNodes()) {
+						footSection.removeChild(footSection.firstChild);
+					}
 					while (nameHeader.hasChildNodes()) {
 						nameHeader.removeChild(nameHeader.firstChild);
 					}
