@@ -303,7 +303,7 @@
 				// requests to create a game
 				// questionerMode - the mode of how the questioner changes owner/random/sequential
 				function createGame(questionerMode, aiEnabled){
-					socket.emit('createGame', getURL(), questionerMode, aiEnabled, function()){
+					socket.emit('createGame', getURL(), questionerMode, aiEnabled, function(){
 						joinRoom();
 						var joinButton = document.getElementById("joinGame");
 						joinButton.click();
