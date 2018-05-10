@@ -499,6 +499,10 @@
 					container.appendChild(section);
 				}
 
+				function pageAddReply(user, answer, reply) {
+					var container = document.getElementById("");
+				}
+
 					// pageAnswerPopup: creates a popup to show the entirety of an answer
 				function pageAnswerPopup(id) {
 	        var nameHeader = document.getElementById("answerUserModal");
@@ -531,6 +535,14 @@
 				 	textBox.setAttribute("id","replyBox");
 				 	textBox.setAttribute("placeholder", "Your Reply");
 				 	footerSection.appendChild(textBox);
+					<button type="button" style="background-color: #FFB9B9" class="btn text-white" data-dismiss="modal">close</button>
+					var closeButton = document.createElement("button");
+					closeButton.setAttribute("style", "background-color: #FFB9B9");
+					closeButton.setAttribute("class", "btn text-white");
+					closeButton.setAttribute("data-dismiss", "modal");
+					var closeText = document.createTextNode("close");
+					closeButton.appendChild(closeText);
+					footerSection.appendChild(closeButton);
 					$("textarea").keyup(function(e) {
 					var code = e.keyCode ? e.keyCode : e.which;
 					if (code == 13) {  // Enter keycode
