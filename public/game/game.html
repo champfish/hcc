@@ -235,6 +235,7 @@
 
 					pageSetUsers(game.players);
 					pageSetAnswers(game.answers)
+					pageSetReplies(game.replies)
 
 					g = game;
 				}
@@ -336,6 +337,14 @@
 					for(var i =0;i<answers.length;i++){
 						console.log(answers[i]);
 						pageAddAnswer(answers[i].name,answers[i].text);
+					}
+				}
+
+				function pageSetReply(replies,id){
+					pageRemoveAllReplies();
+					for(var i =0;i<replies.length;i++){
+						console.log(replies[i]);
+						pageAddReply(replies[i].name,replies[i].text,id);
 					}
 				}
 
@@ -499,8 +508,21 @@
 					container.appendChild(section);
 				}
 
-				function pageAddReply(user, answer, reply) {
-					var container = document.getElementById("");
+				function pageAddReply(user, reply, answerID) {
+					var answer = document.getElementById(answerID);
+	        var replyContainer = document.createElement("DIV");
+	        newReply.setAttribute("class", "col-11 rounded p-2 m-2 bg-light text-secondary");
+	        var userHeader = document.createElement("h3");
+	        var userText = document.createTextNode(user);
+	        userHeader.appendChild(userText);
+	        var reply = document.createElement("p");
+	        var replyText = document.createTextNode(newReply);
+	        reply.appendChild(replyText);
+	        reply.setAttribute("class", "p-2");
+	        replyContainer.appendChild(userHeader);
+	        replyContainer.appendChild(reply);
+	        answer.appendChild(replyContainer);
+
 				}
 
 					// pageAnswerPopup: creates a popup to show the entirety of an answer
@@ -547,7 +569,7 @@
 					if (code == 13) {  // Enter keycode
 					var reply = document.getElementById("replyBox").value;
 					document.getElementById("replyBox").value = "";
-					submitReply(reply);
+					submitReply(reply,id);
 					 }
 					});
 	      }
