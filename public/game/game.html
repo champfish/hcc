@@ -263,7 +263,7 @@
 				}
 
 				// request to submit user reply
-				function submitReply(reply){
+				function submitReply(reply, id){
 					socket.emit('submitReply', reply);
 					console.log(reply);
 				}
@@ -340,8 +340,8 @@
 					}
 				}
 
-				function pageSetReply(replies,id){
-					pageRemoveAllReplies();
+				function pageSetReplies(replies,id){
+				//	pageRemoveAllReplies();
 					for(var i =0;i<replies.length;i++){
 						console.log(replies[i]);
 						pageAddReply(replies[i].name,replies[i].text,id);
