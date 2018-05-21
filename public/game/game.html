@@ -264,7 +264,7 @@
 
 				// request to submit user reply
 				function submitReply(reply, id){
-					socket.emit('submitReply', reply);
+					socket.emit('submitReply', reply, id);
 					console.log(reply);
 				}
 
@@ -565,11 +565,12 @@
 					closeButton.appendChild(closeText);
 					footerSection.appendChild(closeButton);
 					$("textarea").keyup(function(e) {
-					var code = e.keyCode ? e.keyCode : e.which;
-					if (code == 13) {  // Enter keycode
-					var reply = document.getElementById("replyBox").value;
-					document.getElementById("replyBox").value = "";
-					submitReply(reply,id);
+						var code = e.keyCode ? e.keyCode : e.which;
+						if (code == 13) {  // Enter keycode
+						var reply = document.getElementById("replyBox").value;
+					//	document.getElementById("replyBox").value = "";
+						pageAddReply(user, reply, id);
+					//	submitReply(reply,id);
 					 }
 					});
 	      }
