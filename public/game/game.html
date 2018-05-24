@@ -567,12 +567,13 @@
 					replyButton.setAttribute("style", "background-color: #FFB9B9");
 					replyButton.setAttribute("class", "btn text-white");
 					replyButton.setAttribute("data-dismiss", "modal");
+					var reply = document.getElementById("replyBox").value;
+					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + "," + reply + "," + id +")");
 					var replyText = document.createTextNode("reply");
 					closeButton.appendChild(closeText);
 					replyButton.appendChild(replyText);
 					footerSection.appendChild(closeButton);
 					footerSection.appendChild(replyButton);
-					
 					$("textarea").keyup(function(e) {
 						var code = e.keyCode ? e.keyCode : e.which;
 						if (code == 13) {  // Enter keycode
