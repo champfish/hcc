@@ -566,9 +566,8 @@
 					var replyButton = document.createElement("button");
 					replyButton.setAttribute("style", "background-color: #FFB9B9");
 					replyButton.setAttribute("class", "btn text-white");
-					replyButton.setAttribute("data-dismiss", "modal");
 					var reply = document.getElementById("replyBox").value;
-					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + "," + reply + "," + id +")");
+					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + reply + "," + id +")");
 					var replyText = document.createTextNode("reply");
 					closeButton.appendChild(closeText);
 					replyButton.appendChild(replyText);
