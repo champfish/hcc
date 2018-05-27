@@ -508,7 +508,7 @@
 					container.appendChild(section);
 				}
 
-				function pageAddReply(user, reply, answerID) {
+			/*	function pageAddReply(user, reply, answerID) {
 					var answer = document.getElementById(answerID);
 	        var replyContainer = document.createElement("DIV");
 	        newReply.setAttribute("class", "col-11 rounded p-2 m-2 bg-light text-secondary");
@@ -524,6 +524,26 @@
 	        answer.appendChild(replyContainer);
 
 				}
+				*/
+
+				function pageAddReply(user){
+	        var reply = document.getElementById("replyBox").value;
+	        var container = document.getElementById("replyArea");
+	        var par = document.createElement("p");
+	        var newReply = document.createTextNode(reply);
+	        var replyContainer = document.createElement("div");
+	        replyContainer.setAttribute("class", "col-11 rounded p-2 m-2 bg-light text-secondary");
+	        par.setAttribute("class", "p-2");
+	        var userHeader = document.createElement("h3");
+	        var userText = document.createTextNode(user);
+	        userHeader.appendChild(userText);
+	        replyContainer.appendChild(userHeader);
+	        par.appendChild(newReply);
+	        replyContainer.appendChild(par);
+	        container.appendChild(replyContainer);
+	        document.getElementById("replyBox").value = "";
+	      }
+
 
 					// pageAnswerPopup: creates a popup to show the entirety of an answer
 				function pageAnswerPopup(id) {
@@ -552,7 +572,7 @@
 	        nameSection.appendChild(nameText);
 
 					var textBox = document.createElement("textarea");
-					textBox.setAttribute("class", "form-control col-11 col-md-8 col-lg-8 p-1");
+					textBox.setAttribute("class", "form-control col-11 col-sm-6 col-md-8 col-lg-8 p-1");
 				 	textBox.setAttribute("rows", "3");
 				 	textBox.setAttribute("id","replyBox");
 				 	textBox.setAttribute("placeholder", "Your Reply");
@@ -567,13 +587,13 @@
 					replyButton.setAttribute("style", "background-color: #FFB9B9");
 					replyButton.setAttribute("class", "btn text-white");
 					var reply = document.getElementById("replyBox").value;
-					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + reply + "," + id +")");
+					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + id +")");
 					var replyText = document.createTextNode("reply");
 					closeButton.appendChild(closeText);
 					replyButton.appendChild(replyText);
 					footerSection.appendChild(closeButton);
 					footerSection.appendChild(replyButton);
-					$("textarea").keyup(function(e) {
+				/*	$("textarea").keyup(function(e) {
 						var code = e.keyCode ? e.keyCode : e.which;
 						if (code == 13) {  // Enter keycode
 						var reply = document.getElementById("replyBox").value;
@@ -582,6 +602,7 @@
 					//	submitReply(reply,id);
 					 }
 					});
+					*/
 	      }
 		init();
 		</script>
