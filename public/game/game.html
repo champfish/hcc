@@ -600,7 +600,7 @@
 					replyButton.setAttribute("style", "background-color: #FFB9B9");
 					replyButton.setAttribute("class", "btn text-white");
 					var reply = document.getElementById("replyBox").value;
-					replyButton.setAttribute("onclick", "pageAddReply("+ user + "," + id +")");
+					replyButton.setAttribute("onclick", "pageAddReply('"+ user + "'," + id +")");
 					var replyText = document.createTextNode("reply");
 					closeButton.appendChild(closeText);
 					replyButton.appendChild(replyText);
