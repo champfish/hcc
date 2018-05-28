@@ -504,6 +504,12 @@
 					newDiv.appendChild(newUser);
 					para.appendChild(answerText);
 					newDiv.appendChild(para);
+
+					var replyArea = document.createElement("div");
+					replyArea.setAttribute("id", "replyArea" + answerId);
+
+					newDiv.appendChild(replyArea);
+
 					section.appendChild(newDiv);
 					container.appendChild(section);
 				}
@@ -526,9 +532,14 @@
 				}
 				*/
 
-				function pageAddReply(user){
+				function pageAddReply(user, id){
+					alert("1");
+
 	        var reply = document.getElementById("replyBox").value;
-	        var container = document.getElementById("replyArea");
+	        var container = document.getElementById("replyArea" + id);
+
+					alert("2");
+
 	        var par = document.createElement("p");
 	        var newReply = document.createTextNode(reply);
 	        var replyContainer = document.createElement("div");
@@ -536,12 +547,14 @@
 	        par.setAttribute("class", "p-2");
 	        var userHeader = document.createElement("h3");
 	        var userText = document.createTextNode(user);
+					alert("3");
 	        userHeader.appendChild(userText);
 	        replyContainer.appendChild(userHeader);
 	        par.appendChild(newReply);
 	        replyContainer.appendChild(par);
 	        container.appendChild(replyContainer);
 	        document.getElementById("replyBox").value = "";
+					alert("4");
 	      }
 
 
