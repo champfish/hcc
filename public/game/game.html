@@ -235,7 +235,7 @@
 
 					pageSetUsers(game.players);
 					pageSetAnswers(game.answers)
-					pageSetReplies(game.replies)
+			//		pageSetReplies(game.replies)
 
 					g = game;
 				}
@@ -263,8 +263,8 @@
 				}
 
 				// request to submit user reply
-				function submitReply(reply, id){
-					socket.emit('submitReply', reply, id);
+				function submitReply(reply){
+					socket.emit('submitReply', reply);
 					console.log(reply);
 				}
 
@@ -340,13 +340,14 @@
 					}
 				}
 
-				function pageSetReplies(replies,id){
+		/*		function pageSetReplies(replies,id){
 				//	pageRemoveAllReplies();
 					for(var i =0;i<replies.length;i++){
 						console.log(replies[i]);
 						pageAddReply(replies[i].name,replies[i].text,id);
 					}
 				}
+				*/
 
 					// pageJoinGame: registers user and allows them to answer
 				function pageJoinGame() {
@@ -533,12 +534,9 @@
 				*/
 
 				function pageAddReply(user, id){
-					alert("1");
 
 	        var reply = document.getElementById("replyBox").value;
 	        var container = document.getElementById("replyArea" + id);
-
-					alert("2");
 
 	        var par = document.createElement("p");
 	        var newReply = document.createTextNode(reply);
@@ -547,14 +545,12 @@
 	        par.setAttribute("class", "p-2");
 	        var userHeader = document.createElement("h3");
 	        var userText = document.createTextNode(user);
-					alert("3");
 	        userHeader.appendChild(userText);
 	        replyContainer.appendChild(userHeader);
 	        par.appendChild(newReply);
 	        replyContainer.appendChild(par);
 	        container.appendChild(replyContainer);
 	        document.getElementById("replyBox").value = "";
-					alert("4");
 	      }
 
 
