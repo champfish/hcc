@@ -235,7 +235,7 @@
 
 					pageSetUsers(game.players);
 					pageSetAnswers(game.answers)
-			//		pageSetReplies(game.replies)
+					pageSetReplies(game.replies)
 
 					g = game;
 				}
@@ -341,12 +341,12 @@
 						pageAddAnswer(answers[i].name,answers[i].text);
 					}
 				}
-
-		/*		function pageSetReplies(replies,id){
+/*
+				function pageSetReplies(replies){
 				//	pageRemoveAllReplies();
 					for(var i =0;i<replies.length;i++){
 						console.log(replies[i]);
-						pageAddReply(replies[i].name,replies[i].text,id);
+						pageAddReply(replies[i].name,replies[i].text,replies[i].id);
 					}
 				}
 				*/
@@ -516,7 +516,7 @@
 					section.appendChild(newDiv);
 					container.appendChild(section);
 				}
-				
+				/*
 				function pageAddReply(user, id){
 
 	        var reply = document.getElementById("replyBox").value;
@@ -536,7 +536,7 @@
 	        container.appendChild(replyContainer);
 	        document.getElementById("replyBox").value = "";
 	      }
-
+*/
 
 					// pageAnswerPopup: creates a popup to show the entirety of an answer
 				function pageAnswerPopup(id) {
@@ -564,19 +564,20 @@
 	        nameHeader.appendChild(nameSection);
 	        nameSection.appendChild(nameText);
 
-					var textBox = document.createElement("textarea");
+				/*	var textBox = document.createElement("textarea");
 					textBox.setAttribute("class", "form-control col-11 col-sm-6 col-md-8 col-lg-8 p-1");
 				 	textBox.setAttribute("rows", "3");
 				 	textBox.setAttribute("id","replyBox");
 				 	textBox.setAttribute("placeholder", "Your Reply");
 				 	footerSection.appendChild(textBox);
+					*/
 					var closeButton = document.createElement("button");
 					closeButton.setAttribute("style", "background-color: #FFB9B9");
 					closeButton.setAttribute("class", "btn text-white");
 					closeButton.setAttribute("data-dismiss", "modal");
 					var closeText = document.createTextNode("close");
 					closeButton.appendChild(closeText);
-					var replyButton = document.createElement("button");
+				/*	var replyButton = document.createElement("button");
 					replyButton.setAttribute("style", "background-color: #FFB9B9");
 					replyButton.setAttribute("class", "btn text-white");
 					var reply = document.getElementById("replyBox").value;
